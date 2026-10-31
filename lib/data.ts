@@ -18,8 +18,8 @@ export const avatarImages = [
 ]
 
 export const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "Upcoming Events", href: "#events" },
+  { label: "Home", href: "/" },
+  { label: "Upcoming Events", href: "/upcoming-events" },
   { label: "About", href: "#about" },
   { label: "Gallery", href: "#gallery" },
   { label: "Contact", href: "#contact" },

@@ -94,7 +94,7 @@ export function Footer() {
               </span>
               <div>
                 <p className="font-heading text-lg leading-tight font-bold text-white">
-                  CommunityHub
+                  Kindora
                 </p>
                 <p className="text-[11px] text-white/50">
                   Together for a better society
@@ -166,7 +166,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-white/10 py-5 text-center text-xs text-white/50">
-          © 2026 CommunityHub. All rights reserved.
+          © 2026 Kindora. All rights reserved.
         </div>
       </footer>
     </>
