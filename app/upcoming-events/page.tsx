@@ -1,11 +1,34 @@
-import React from 'react';
+import type { Event } from "@/components/type/type"
+import { UpcomingEventsClient } from "@/components/upcoming-events/upcoming-events-client"
 
-const UpcomingEventsPage = () => {
-    return (
-        <div>
-            UpcomingEventsPage
-        </div>
-    );
-};
+export default async function UpcomingEventsPage() {
+  let events: Event[] = []
 
-export default UpcomingEventsPage;
+  try {
+    const res = await fetch("http://localhost:8000/upcoming-events", {
+      cache: "no-store",
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch events")
+    }
+
+    events = await res.json()
+
+    const today = new Date()
+
+    const todayString = [
+      today.getFullYear(),
+      String(today.getMonth() + 1).padStart(2, "0"),
+      String(today.getDate()).padStart(2, "0"),
+    ].join("-")
+
+    events = events.filter((event) => {
+      return event.date >= todayString
+    })
+  } catch (error) {
+    console.error("Error fetching events:", error)
+  }
+
+  return <UpcomingEventsClient events={events} />
+}

@@ -1,61 +1,59 @@
+import Image from "next/image"
+import { ArrowRight, CalendarDays, MapPin } from "lucide-react"
 
-import React from "react";
-import Image from "next/image";
-import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardHeader, CardTitle } from "@/components/ui/card"
+import { Event } from "../type/type"
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-import { Event } from "../type/type";
+function formatEventDate(date: string) {
+  // Parsed as a local date so the day never shifts in other timezones.
+  return new Date(`${date}T00:00:00`).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  })
+}
 
 const EventsCard = ({ event }: { event: Event }) => {
-    return (
-        <Card className="relative overflow-hidden rounded-2xl transition-shadow hover:shadow-lg hover:shadow-primary/10">
+  return (
+    <Card className="relative overflow-hidden rounded-2xl pt-0 pb-0 transition-shadow hover:shadow-lg hover:shadow-primary/10">
+      <div className="relative h-44 w-full">
+        <Image
+          src={event.image}
+          alt={event.title}
+          fill
+          className="object-cover"
+          unoptimized
+        />
+      </div>
 
-          <div className="relative h-44 w-full">
-    <Image
-    src={event.image}
-    alt={event.title}
-    fill
-    className="object-cover"
-    unoptimized
-/>
-</div>
+      <Badge className="absolute top-3 left-3">{event.eventType}</Badge>
 
-            <Badge className="absolute left-3 top-3">
-                {event.eventType}
-            </Badge>
+      <CardHeader>
+        <CardTitle className="font-heading text-base font-bold text-[#1e1b4b] dark:text-white">
+          {event.title}
+        </CardTitle>
 
-            <CardHeader>
-                <CardTitle className="font-heading text-base font-bold text-[#1e1b4b] dark:text-white">
-                    {event.title}
-                </CardTitle>
+        <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <MapPin className="size-3.5 text-primary" />
+          {event.location}
+        </p>
 
-                <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <MapPin className="size-3.5 text-primary" />
-                    {event.location}
-                </p>
+        <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <CalendarDays className="size-3.5 text-primary" />
+          {formatEventDate(event.date)}
+        </p>
+      </CardHeader>
 
-                <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <CalendarDays className="size-3.5 text-primary" />
-                    {new Date(event.date).toLocaleDateString()}
-                </p>
+      <div className="flex justify-start px-4 pb-4">
+        <Button className="gap-2 px-4">
+          View Event
+          <ArrowRight className="size-3.5" />
+        </Button>
+      </div>
+    </Card>
+  )
+}
 
-                <p className="line-clamp-2 text-sm text-muted-foreground">
-                    {event.description}
-                </p>
-            </CardHeader>
-
-            <div className="flex justify-end px-4 pb-4">
-                <Button size="sm" className="rounded-full">
-                    View Event
-                    <ArrowRight className="size-3.5" />
-                </Button>
-            </div>
-
-        </Card>
-    );
-};
-
-export default EventsCard;
+export default EventsCard

@@ -128,55 +128,55 @@ export default function LoginPage() {
     }
   }
 
-  const handleForgotPassword = async (event: MouseEvent<HTMLButtonElement>) => {
-    const form = event.currentTarget.form
-    const email = form
-      ? String(new FormData(form).get("email") ?? "").trim()
-      : ""
+  // const handleForgotPassword = async (event: MouseEvent<HTMLButtonElement>) => {
+  //   const form = event.currentTarget.form
+  //   const email = form
+  //     ? String(new FormData(form).get("email") ?? "").trim()
+  //     : ""
 
-    if (!email) {
-      setErrors((previous) => ({
-        ...previous,
-        email: "Enter your email address first",
-      }))
-      return
-    }
-    if (!EMAIL_PATTERN.test(email)) {
-      setErrors((previous) => ({
-        ...previous,
-        email: "Enter a valid email address",
-      }))
-      return
-    }
+  //   if (!email) {
+  //     setErrors((previous) => ({
+  //       ...previous,
+  //       email: "Enter your email address first",
+  //     }))
+  //     return
+  //   }
+  //   if (!EMAIL_PATTERN.test(email)) {
+  //     setErrors((previous) => ({
+  //       ...previous,
+  //       email: "Enter a valid email address",
+  //     }))
+  //     return
+  //   }
 
-    setNotice(null)
-    setPending("reset")
-    try {
-      const { data, error } = await authClient.requestPasswordReset({ email })
+  //   setNotice(null)
+  //   setPending("reset")
+  //   try {
+  //     const { data, error } = await authClient.requestPasswordReset({ email })
 
-      if (error) {
-        setNotice({
-          type: "error",
-          text: error.message ?? "Could not send the reset link.",
-        })
-        return
-      }
-      if (data) {
-        setNotice({
-          type: "success",
-          text:
-            data.message ?? "If that email exists, a reset link is on its way.",
-        })
-      }
-    } catch {
-      setNotice({
-        type: "error",
-        text: "Something went wrong. Please try again.",
-      })
-    } finally {
-      setPending(null)
-    }
-  }
+  //     if (error) {
+  //       setNotice({
+  //         type: "error",
+  //         text: error.message ?? "Could not send the reset link.",
+  //       })
+  //       return
+  //     }
+  //     if (data) {
+  //       setNotice({
+  //         type: "success",
+  //         text:
+  //           data.message ?? "If that email exists, a reset link is on its way.",
+  //       })
+  //     }
+  //   } catch {
+  //     setNotice({
+  //       type: "error",
+  //       text: "Something went wrong. Please try again.",
+  //     })
+  //   } finally {
+  //     setPending(null)
+  //   }
+  // }
 
   const handleGoogleSignIn = async () => {
     setNotice(null)
@@ -305,26 +305,26 @@ export default function LoginPage() {
 
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-2">
-                      <Checkbox
+                      {/* <Checkbox
                         id="login-remember"
                         name="rememberMe"
                         defaultChecked
-                      />
-                      <Label
+                      /> */}
+                      {/* <Label
                         htmlFor="login-remember"
                         className="cursor-pointer font-normal text-muted-foreground"
                       >
                         Remember me
-                      </Label>
+                      </Label> */}
                     </div>
-                    <button
+                    {/* <button
                       type="button"
                       onClick={handleForgotPassword}
                       disabled={pending !== null}
                       className="text-sm font-medium text-primary hover:underline disabled:opacity-50"
                     >
                       {pending === "reset" ? "Sending..." : "Forgot password?"}
-                    </button>
+                    </button> */}
                   </div>
 
                   {notice && (

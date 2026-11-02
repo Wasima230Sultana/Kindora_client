@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { redirect } from "next/navigation"
 
 const eventTypes = ["Registration", "Donation", "Cleanup"]
 
@@ -97,8 +98,9 @@ export default function CreateEventPage() {
     if (Object.keys(nextErrors).length > 0) {
       return
     }
-
     console.log(values)
+    redirect('/upcoming-events')
+
   }
 
   return (
