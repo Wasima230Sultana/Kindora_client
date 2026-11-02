@@ -18,16 +18,17 @@ export async function RecentUpcomingEvents() {
 
         events = await res.json();
 
-        // Filter out past events
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+const today = new Date();
 
-        events = events.filter((event) => {
-            const eventDate = new Date(event.eventDate);
-            eventDate.setHours(0, 0, 0, 0);
+const todayString = [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, "0"),
+    String(today.getDate()).padStart(2, "0"),
+].join("-");
 
-            return eventDate >= today;
-        });
+events = events.filter((event) => {
+    return event.date >= todayString;
+});
 
     } catch (error) {
         console.error("Error fetching events:", error);

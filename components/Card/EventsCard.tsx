@@ -14,21 +14,13 @@ const EventsCard = ({ event }: { event: Event }) => {
         <Card className="relative overflow-hidden rounded-2xl transition-shadow hover:shadow-lg hover:shadow-primary/10">
 
           <div className="relative h-44 w-full">
-    {event.thumbnailUrl ? (
-        <Image
-            src={event.thumbnailUrl}
-            alt={event.title || "Event image"}
-            fill
-            className="object-cover"
-            unoptimized
-        />
-    ) : (
-        <div className="flex h-full items-center justify-center bg-muted">
-            <span className="text-sm text-muted-foreground">
-                No image available
-            </span>
-        </div>
-    )}
+    <Image
+    src={event.image}
+    alt={event.title}
+    fill
+    className="object-cover"
+    unoptimized
+/>
 </div>
 
             <Badge className="absolute left-3 top-3">
@@ -47,7 +39,7 @@ const EventsCard = ({ event }: { event: Event }) => {
 
                 <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
                     <CalendarDays className="size-3.5 text-primary" />
-                    {new Date(event.eventDate).toLocaleDateString()}
+                    {new Date(event.date).toLocaleDateString()}
                 </p>
 
                 <p className="line-clamp-2 text-sm text-muted-foreground">
