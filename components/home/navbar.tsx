@@ -37,6 +37,8 @@ import { avatarImages, navLinks } from "@/lib/data"
 import { cn } from "@/lib/utils"
 import { usePathname } from "next/navigation"
 
+
+
 const userMenuLinks = [
   { label: "Create Event", href: "/create-event", icon: CalendarPlus },
   { label: "Joined Event", href: "#events", icon: CalendarCheck },
@@ -93,7 +95,16 @@ function Logo() {
 
 export function Navbar() {
   const [open, setOpen] = React.useState(false)
-  const pathname = usePathname()
+  const pathname = usePathname();
+
+  const filteredLinks =
+    pathname === "/upcoming-events"
+      ? navLinks.filter(
+        (link) =>
+          link.href === "/" ||
+          link.href === "/upcoming-events"
+      )
+      : navLinks;
   const isActive = (href: string) => {
     return (
       pathname === href ||
@@ -106,8 +117,8 @@ export function Navbar() {
         <Logo />
 
         <nav className="hidden items-center gap-1 lg:flex">
-          {navLinks.map((link) => {
-            const active = isActive(link.href)
+          {filteredLinks.map((link) => {
+            const active = isActive(link.href);
 
             return (
               <Link
@@ -123,7 +134,7 @@ export function Navbar() {
               >
                 {link.label}
               </Link>
-            )
+            );
           })}
         </nav>
         <div className="flex items-center gap-2">
@@ -199,11 +210,11 @@ export function Navbar() {
                 </SheetDescription>
               </SheetHeader>
               <nav className="flex flex-col gap-2 px-4 pb-4">
-                {navLinks.map((link) => {
+                {filteredLinks.map((link) => {
                   const active = isActive(link.href)
 
                   return (
-                    <SheetClose
+                    <SheetClose nativeButton={false}
                       key={link.label}
                       render={<Link href={link.href} />}
                       onClick={() => setOpen(false)}
