@@ -45,7 +45,7 @@ events = events.filter((event) => {
                     </h2>
 
                     <Link
-                        href="/upcoming-event"
+                        href="/upcoming-events"
                         className="flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
                     >
                         View All

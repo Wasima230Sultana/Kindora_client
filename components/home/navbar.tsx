@@ -36,6 +36,7 @@ import {
 import { avatarImages, navLinks } from "@/lib/data"
 import { cn } from "@/lib/utils"
 import { usePathname } from "next/navigation"
+import { authClient } from "@/lib/auth-client"
 
 
 
@@ -96,7 +97,8 @@ function Logo() {
 export function Navbar() {
   const [open, setOpen] = React.useState(false)
   const pathname = usePathname();
-
+const {data:session} = authClient.useSession();
+const user = session?.user;
   const filteredLinks =
     pathname === "/upcoming-events"
       ? navLinks.filter(
@@ -105,6 +107,9 @@ export function Navbar() {
           link.href === "/upcoming-events"
       )
       : navLinks;
+      const handleSignout=async()=>{
+        await authClient.signOut()
+      }
   const isActive = (href: string) => {
     return (
       pathname === href ||
@@ -139,8 +144,8 @@ export function Navbar() {
         </nav>
         <div className="flex items-center gap-2">
           <ThemeToggle />
-
-          <DropdownMenu>
+{
+  user?<> <DropdownMenu>
             <DropdownMenuTrigger
               aria-label="Open account menu"
               render={
@@ -152,8 +157,9 @@ export function Navbar() {
               }
             >
               <Avatar size="sm">
-                <AvatarImage src={avatarImages[0]} alt="Your profile" />
-                <AvatarFallback>CH</AvatarFallback>
+                <AvatarImage    src={user.image || undefined}
+                        alt={user.name || "User"}/>
+                <AvatarFallback>  {user.name?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
@@ -172,6 +178,7 @@ export function Navbar() {
               })}
               <DropdownMenuSeparator />
               <DropdownMenuItem
+              onClick={handleSignout}
                 variant="destructive"
                 className="cursor-pointer gap-2"
               >
@@ -179,15 +186,17 @@ export function Navbar() {
                 Sign Out
               </DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenu>
-          <Link href={"/signup"}>
+          </DropdownMenu></>:<>  <Link href={"/signup"}>
             {" "}
             <Button className="rounded-full px-5">Sign up</Button>
           </Link>
           <Link href={"/login"}>
             {" "}
             <Button className="rounded-full px-5">Login</Button>
-          </Link>
+          </Link></>
+}
+         
+        
 
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger

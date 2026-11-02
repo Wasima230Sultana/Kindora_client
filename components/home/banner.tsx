@@ -4,6 +4,7 @@ import { ArrowRight, Heart, Leaf } from "lucide-react"
 import { Avatar, AvatarGroup, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { avatarImages, heroImage } from "@/lib/data"
+import Link from "next/link"
 
 export function Banner() {
   return (
@@ -34,16 +35,21 @@ export function Banner() {
           </p>
 
           <div className="mt-7 flex flex-wrap items-center gap-3">
-            <Button className="h-11 rounded-full px-6 text-[0.9rem]">
+            <Link href={'/upcoming-events'}>
+             <Button className="h-11 rounded-full px-6 text-[0.9rem]">
               Explore Events
               <ArrowRight />
             </Button>
-            <Button
+            </Link>
+           
+             <Link href={'/create-event'}>
+              <Button
               variant="outline"
               className="h-11 rounded-full border-primary/30 px-6 text-[0.9rem] text-primary hover:bg-primary/5 hover:text-primary"
             >
               Create Event
-            </Button>
+            </Button></Link>
+           
           </div>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
