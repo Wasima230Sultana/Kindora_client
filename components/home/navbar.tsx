@@ -38,7 +38,7 @@ import { cn } from "@/lib/utils"
 import { usePathname } from "next/navigation"
 
 const userMenuLinks = [
-  { label: "Create Event", href: "#home", icon: CalendarPlus },
+  { label: "Create Event", href: "/create-event", icon: CalendarPlus },
   { label: "Joined Event", href: "#events", icon: CalendarCheck },
   { label: "Manage Event", href: "#events", icon: Settings },
   { label: "Profile", href: "#profile", icon: UserRound },
