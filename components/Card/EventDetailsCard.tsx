@@ -15,6 +15,7 @@ import { authClient } from '@/lib/auth-client';
 const EventDetailsCard = async ({ result }: { result: Event }) => {
       const { data: session } = await authClient.getSession()
         const user = session?.user
+        console.log(user)
     return (
         <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
 

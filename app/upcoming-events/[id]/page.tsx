@@ -2,19 +2,12 @@
 import Link from "next/link"
 import {
     ArrowLeft,
-    CalendarDays,
-    MapPin,
-    Users,
-    Mail,
-    Heart,
-    HandHeart,
-    CalendarCheck,
 } from "lucide-react"
 import { notFound } from "next/navigation"
-import Image from "next/image";
 import { Event } from "@/components/type/type";
 import { Button } from "@/components/ui/button";
 import EventDetailsCard from "@/components/Card/EventDetailsCard";
+import DeleteEvents from "@/components/events/DeleteEvents";
 type PageProps = {
     params: Promise<{ id: string }>;
 };
@@ -53,7 +46,7 @@ const EventDetailsPage = async ({ params }: PageProps) => {
                     </Link>
                     <div className="flex gap-5">
                         <Button>Edit</Button>
-                        <Button>Delete</Button>
+                        <DeleteEvents result={result}></DeleteEvents>
                     </div>
 
                 </div>

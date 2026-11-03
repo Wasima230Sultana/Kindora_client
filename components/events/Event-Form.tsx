@@ -2,7 +2,7 @@
 import { useSyncExternalStore, useState, type FormEvent } from "react"
 import React from 'react';
 
-import { CalendarCheck, Leaf, Send } from "lucide-react"
+import { Send } from "lucide-react"
 import { Form } from "@base-ui/react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
