@@ -8,6 +8,7 @@ import { Event } from "@/components/type/type";
 import { Button } from "@/components/ui/button";
 import EventDetailsCard from "@/components/Card/EventDetailsCard";
 import DeleteEvents from "@/components/events/DeleteEvents";
+import EditEvents from "@/components/events/EditEvents";
 type PageProps = {
     params: Promise<{ id: string }>;
 };
@@ -45,7 +46,7 @@ const EventDetailsPage = async ({ params }: PageProps) => {
                         Back to Events
                     </Link>
                     <div className="flex gap-5">
-                        <Button>Edit</Button>
+                        <EditEvents result={result}></EditEvents>
                         <DeleteEvents result={result}></DeleteEvents>
                     </div>
 
