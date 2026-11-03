@@ -42,7 +42,7 @@ const userMenuLinks = [
   { label: "Create Event", href: "/create-event", icon: CalendarPlus },
   { label: "Joined Event", href: "#events", icon: CalendarCheck },
   { label: "Manage Event", href: "#events", icon: Settings },
-  { label: "Profile", href: "#profile", icon: UserRound },
+  { label: "Profile", href: "/profile", icon: UserRound },
 ]
 
 // Client-only snapshot: false during SSR/hydration, true after — avoids the

@@ -11,9 +11,12 @@ import {
     CalendarCheck,
 } from "lucide-react"
 import Image from "next/image";
-import { authClient } from '@/lib/auth-client';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 const EventDetailsCard = async ({ result }: { result: Event }) => {
-      const { data: session } = await authClient.getSession()
+      const session = await auth.api.getSession({
+        headers: await headers()
+      });
         const user = session?.user
         console.log(user)
     return (
