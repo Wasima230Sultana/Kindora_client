@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import Image from "next/image";
 
 type FieldName = "name" | "image";
 type FormErrors = Partial<Record<FieldName, string>>;
@@ -146,7 +147,9 @@ const ProfilePage = () => {
             <div className="flex items-center gap-4">
               <div className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-violet-100 text-xl font-bold text-violet-700">
                 {image ? (
-                  <img
+                  <Image
+                  width={100}
+                  height={30}
                     src={image}
                     alt="Profile preview"
                     className="size-full object-cover"

@@ -14,7 +14,11 @@ import {
 } from "lucide-react"
 import { useTheme } from "next-themes"
 import Link from "next/link"
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
@@ -37,6 +41,7 @@ import { avatarImages, navLinks } from "@/lib/data"
 import { cn } from "@/lib/utils"
 import { usePathname } from "next/navigation"
 import { authClient } from "@/lib/auth-client"
+import ThemeToggle from "../theme/ThemeToggle"
 
 const userMenuLinks = [
   { label: "Create Event", href: "/create-event", icon: CalendarPlus },
@@ -52,26 +57,26 @@ const subscribe = () => () => {}
 const getClientSnapshot = () => true
 const getServerSnapshot = () => false
 
-function ThemeToggle() {
-  const { resolvedTheme, setTheme } = useTheme()
-  const mounted = React.useSyncExternalStore(
-    subscribe,
-    getClientSnapshot,
-    getServerSnapshot
-  )
-  const isDark = mounted && resolvedTheme === "dark"
+// function ThemeToggle() {
+//   const { resolvedTheme, setTheme } = useTheme()
+//   const mounted = React.useSyncExternalStore(
+//     subscribe,
+//     getClientSnapshot,
+//     getServerSnapshot
+//   )
+//   const isDark = mounted && resolvedTheme === "dark"
 
-  return (
-    <Button
-      variant="ghost"
-      size="icon"
-      aria-label="Toggle color theme"
-      onClick={() => setTheme(isDark ? "light" : "dark")}
-    >
-      {isDark ? <Sun /> : <Moon />}
-    </Button>
-  )
-}
+//   return (
+//     <Button
+//       variant="ghost"
+//       size="icon"
+//       aria-label="Toggle color theme"
+//       onClick={() => setTheme(isDark ? "light" : "dark")}
+//     >
+//       {isDark ? <Sun /> : <Moon />}
+//     </Button>
+//   )
+// }
 
 function Logo() {
   return (
@@ -153,16 +158,27 @@ export function Navbar() {
                     />
                   }
                 >
-                  <Avatar size="sm">
-                    <AvatarImage
-                      src={user.image || undefined}
-                      alt={user.name || "User"}
-                    />
-                    <AvatarFallback>
-                      {" "}
-                      {user.name?.charAt(0).toUpperCase() || "U"}
-                    </AvatarFallback>
-                  </Avatar>
+<Tooltip>
+  <TooltipTrigger
+    render={
+      <Avatar size="sm">
+        <AvatarImage
+          src={user.image || undefined}
+          alt={user.name || "User"}
+        />
+
+        <AvatarFallback>
+          {user.name?.charAt(0).toUpperCase() || "U"}
+        </AvatarFallback>
+      </Avatar>
+    }
+  />
+
+  <TooltipContent>
+    <p>{user.name || "User"}</p>
+  </TooltipContent>
+</Tooltip>
+
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   {userMenuLinks.map((link) => {
