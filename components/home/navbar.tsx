@@ -38,8 +38,6 @@ import { cn } from "@/lib/utils"
 import { usePathname } from "next/navigation"
 import { authClient } from "@/lib/auth-client"
 
-
-
 const userMenuLinks = [
   { label: "Create Event", href: "/create-event", icon: CalendarPlus },
   { label: "Joined Event", href: "#events", icon: CalendarCheck },
@@ -50,7 +48,7 @@ const userMenuLinks = [
 // Client-only snapshot: false during SSR/hydration, true after — avoids the
 // banned setState-in-effect "mounted" pattern while still preventing a
 // theme-icon hydration mismatch (next-themes resolves the theme client-side).
-const subscribe = () => () => { }
+const subscribe = () => () => {}
 const getClientSnapshot = () => true
 const getServerSnapshot = () => false
 
@@ -96,24 +94,21 @@ function Logo() {
 
 export function Navbar() {
   const [open, setOpen] = React.useState(false)
-  const pathname = usePathname();
-const {data:session} = authClient.useSession();
-const user = session?.user;
+  const pathname = usePathname()
+  const { data: session } = authClient.useSession()
+  const user = session?.user
   const filteredLinks =
     pathname === "/upcoming-events"
       ? navLinks.filter(
-        (link) =>
-          link.href === "/" ||
-          link.href === "/upcoming-events"
-      )
-      : navLinks;
-      const handleSignout=async()=>{
-        await authClient.signOut()
-      }
+          (link) => link.href === "/" || link.href === "/upcoming-events"
+        )
+      : navLinks
+  const handleSignout = async () => {
+    await authClient.signOut()
+  }
   const isActive = (href: string) => {
     return (
-      pathname === href ||
-      (href !== "/" && pathname.startsWith(`${href}/`))
+      pathname === href || (href !== "/" && pathname.startsWith(`${href}/`))
     )
   }
   return (
@@ -123,7 +118,7 @@ const user = session?.user;
 
         <nav className="hidden items-center gap-1 lg:flex">
           {filteredLinks.map((link) => {
-            const active = isActive(link.href);
+            const active = isActive(link.href)
 
             return (
               <Link
@@ -139,64 +134,75 @@ const user = session?.user;
               >
                 {link.label}
               </Link>
-            );
+            )
           })}
         </nav>
         <div className="flex items-center gap-2">
           <ThemeToggle />
-{
-  user?<> <DropdownMenu>
-            <DropdownMenuTrigger
-              aria-label="Open account menu"
-              render={
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="hidden gap-2 rounded-full px-2 focus-visible:ring-2 focus-visible:ring-primary sm:flex"
-                />
-              }
-            >
-              <Avatar size="sm">
-                <AvatarImage    src={user.image || undefined}
-                        alt={user.name || "User"}/>
-                <AvatarFallback>  {user.name?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
-              </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              {userMenuLinks.map((link) => {
-                const Icon = link.icon
-                return (
+          {user ? (
+            <>
+              {" "}
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  aria-label="Open account menu"
+                  render={
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="hidden gap-2 rounded-full px-2 focus-visible:ring-2 focus-visible:ring-primary sm:flex"
+                    />
+                  }
+                >
+                  <Avatar size="sm">
+                    <AvatarImage
+                      src={user.image || undefined}
+                      alt={user.name || "User"}
+                    />
+                    <AvatarFallback>
+                      {" "}
+                      {user.name?.charAt(0).toUpperCase() || "U"}
+                    </AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  {userMenuLinks.map((link) => {
+                    const Icon = link.icon
+                    return (
+                      <DropdownMenuItem
+                        key={link.label}
+                        render={<a href={link.href} />}
+                        className="cursor-pointer gap-2"
+                      >
+                        <Icon className="text-primary" />
+                        {link.label}
+                      </DropdownMenuItem>
+                    )
+                  })}
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    key={link.label}
-                    render={<a href={link.href} />}
+                    onClick={handleSignout}
+                    variant="destructive"
                     className="cursor-pointer gap-2"
                   >
-                    <Icon className="text-primary" />
-                    {link.label}
+                    <LogOut />
+                    Sign Out
                   </DropdownMenuItem>
-                )
-              })}
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-              onClick={handleSignout}
-                variant="destructive"
-                className="cursor-pointer gap-2"
-              >
-                <LogOut />
-                Sign Out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu></>:<>  <Link href={"/signup"}>
-            {" "}
-            <Button className="rounded-full px-5">Sign up</Button>
-          </Link>
-          <Link href={"/login"}>
-            {" "}
-            <Button className="rounded-full px-5">Login</Button>
-          </Link></>
-}
-         
-        
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          ) : (
+            <>
+              {" "}
+              <Link href={"/signup"}>
+                {" "}
+                <Button className="rounded-full px-5">Sign up</Button>
+              </Link>
+              <Link href={"/login"}>
+                {" "}
+                <Button className="rounded-full px-5">Login</Button>
+              </Link>
+            </>
+          )}
 
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger
@@ -223,7 +229,8 @@ const user = session?.user;
                   const active = isActive(link.href)
 
                   return (
-                    <SheetClose nativeButton={false}
+                    <SheetClose
+                      nativeButton={false}
                       key={link.label}
                       render={<Link href={link.href} />}
                       onClick={() => setOpen(false)}

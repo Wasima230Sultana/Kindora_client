@@ -69,14 +69,16 @@ export default function SignUpPage() {
       }
     }
     if (!values.password) {
-  nextErrors.password = "Password is required"
-} else if (values.password.length < 6) {
-  nextErrors.password = "Password must be at least 6 characters"
-} else if (!/[A-Z]/.test(values.password)) {
-  nextErrors.password = "Password must contain at least one uppercase letter"
-} else if (!/[a-z]/.test(values.password)) {
-  nextErrors.password = "Password must contain at least one lowercase letter"
-}
+      nextErrors.password = "Password is required"
+    } else if (values.password.length < 6) {
+      nextErrors.password = "Password must be at least 6 characters"
+    } else if (!/[A-Z]/.test(values.password)) {
+      nextErrors.password =
+        "Password must contain at least one uppercase letter"
+    } else if (!/[a-z]/.test(values.password)) {
+      nextErrors.password =
+        "Password must contain at least one lowercase letter"
+    }
 
     setErrors(nextErrors)
     if (Object.keys(nextErrors).length > 0) {

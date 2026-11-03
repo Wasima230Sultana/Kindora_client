@@ -15,15 +15,19 @@ Single Next.js 16.4.3 app (App Router, React 19, TypeScript, Tailwind v4, shadcn
 ## Commands (npm, Node 24)
 
 - `npm run dev` — dev server. It also (re)writes the managed block above; content outside the `<!-- BEGIN/END:nextjs-agent-rules -->` markers is preserved, so add your own sections around it, not inside it.
-- `npm run lint` and `npm run typecheck` — both exit clean on a fresh tree; run them to verify a change. There is **no test runner and no CI workflow** in this repo — don't invent `npm test`.
-- `npm run format` — Prettier write over `**/*.{ts,tsx}`. Config is `.prettierrc`: no semicolons, double quotes, `endOfLine: lf`, Tailwind class sorting via `prettier-plugin-tailwindcss`. Lint is flat config `eslint.config.mjs` (`eslint-config-next`); `npm run lint` runs bare `eslint` over the repo.
+- `npm run lint` — bare `eslint` over the repo (flat config `eslint.config.mjs`, `eslint-config-next`). Exits 0 but currently reports 6 unused-variable warnings; don't treat pre-existing warnings as your regression.
+- `npm run typecheck` — `tsc --noEmit`. Currently **fails**: `app/upcoming-events/[id]/page.tsx` has an implicit-`any` `params` (untracked WIP). If you're not touching that file, ignore that one error; otherwise type it properly (`await params` is async in Next 16).
+- `npm run format` — Prettier write over `**/*.{ts,tsx}`. Config is `.prettierrc`: no semicolons, double quotes, `endOfLine: lf`, Tailwind class sorting via `prettier-plugin-tailwindcss`.
+- No test runner and no CI workflow — don't invent `npm test`.
 
 ## Architecture / conventions
 
 - Entry: `app/layout.tsx` → `app/page.tsx`. Layout wraps children in `components/theme-provider.tsx` (next-themes, `suppressHydrationWarning` on `<html>` is required for theme hydration; a `d`-key hotkey toggles theme). `hooks/` is an empty placeholder (only `.gitkeep`).
-- No data layer yet: all page content is mock data in `lib/data.ts` (Unsplash URLs). Remote image hosts are allowlisted in `next.config.ts` (`images.unsplash.com` only) — a new host must be added there or `next/image` will fail.
+- Auth is wired up: better-auth + MongoDB Atlas (`lib/auth.ts` server, `lib/auth-client.ts` browser, handler at `app/api/auth/[...all]/route.ts`; email/password + Google). `.env` (gitignored) must define `MONGODB_URL`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` — it currently does. Database name is hardcoded: `kindora_resources`.
+- Root `proxy.ts` (Next 16's replacement for `middleware.ts`) guards `/create-event`, `/profile`, `/upcoming-events/:path*`, redirecting signed-out users to `/`. Note `/profile` has no page yet.
+- Data layer is half-built: home-page content is still mock data in `lib/data.ts`, but pages/components fetch a separate backend with **hardcoded** `http://localhost:8000/...` URLs (`app/upcoming-events/page.tsx`, `app/create-event/page.tsx`, `components/home/recent-upcoming-events.tsx`). `NEXT_PUBLIC_API_URL` in `.env` is not read by any code yet — use it (or leave the hardcodes alone consistently) rather than inventing a third pattern. Backend must be running for those fetches to succeed.
+- `next.config.ts` allows **all** https image hosts (`remotePatterns: hostname "**"` — changed from an `images.unsplash.com` allowlist); no config edit needed for new hosts.
 - Path alias `@/*` → repo root (tsconfig), e.g. `@/components/ui/button`.
 - shadcn style is `base-nova` (`components.json`): UI primitives are Base UI (`@base-ui/react`), **not Radix** — don't paste Radix-based shadcn snippets. Add components with `npx shadcn@latest add <name>` (lands in `components/ui/`).
 - `cn` is the `cn` npm package, re-exported from `lib/utils.ts` — do not add a clsx/tailwind-merge helper.
 - Tailwind v4 is CSS-first: there is no `tailwind.config.*`; theme tokens and `@theme inline` live in `app/globals.css`, wired through `postcss.config.mjs` (`@tailwindcss/postcss`). Prettier reads that same file (`tailwindStylesheet`) for class ordering.
-- `.env` (gitignored, not committed) defines `NEXT_PUBLIC_API_URL=http://localhost:8000` for a separate backend; no code reads `process.env` yet.

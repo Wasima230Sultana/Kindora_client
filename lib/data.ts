@@ -20,7 +20,7 @@ export const avatarImages = [
 export const navLinks = [
   { label: "Home", href: "/" },
   { label: "Upcoming Events", href: "/upcoming-events" },
-    { label: "Previous Events", href: "#events" },
+  { label: "Previous Events", href: "#events" },
   { label: "About", href: "#about" },
   { label: "Gallery", href: "#gallery" },
   { label: "Contact", href: "#contact" },

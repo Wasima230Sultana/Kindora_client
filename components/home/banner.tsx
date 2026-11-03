@@ -35,21 +35,21 @@ export function Banner() {
           </p>
 
           <div className="mt-7 flex flex-wrap items-center gap-3">
-            <Link href={'/upcoming-events'}>
-             <Button className="h-11 rounded-full px-6 text-[0.9rem]">
-              Explore Events
-              <ArrowRight />
-            </Button>
+            <Link href={"/upcoming-events"}>
+              <Button className="h-11 rounded-full px-6 text-[0.9rem]">
+                Explore Events
+                <ArrowRight />
+              </Button>
             </Link>
-           
-             <Link href={'/create-event'}>
+
+            <Link href={"/create-event"}>
               <Button
-              variant="outline"
-              className="h-11 rounded-full border-primary/30 px-6 text-[0.9rem] text-primary hover:bg-primary/5 hover:text-primary"
-            >
-              Create Event
-            </Button></Link>
-           
+                variant="outline"
+                className="h-11 rounded-full border-primary/30 px-6 text-[0.9rem] text-primary hover:bg-primary/5 hover:text-primary"
+              >
+                Create Event
+              </Button>
+            </Link>
           </div>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">

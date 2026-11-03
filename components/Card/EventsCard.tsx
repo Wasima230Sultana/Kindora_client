@@ -4,16 +4,9 @@ import { ArrowRight, CalendarDays, MapPin } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle } from "@/components/ui/card"
+import { formatEventDate } from "@/lib/utils"
 import { Event } from "../type/type"
-
-function formatEventDate(date: string) {
-  // Parsed as a local date so the day never shifts in other timezones.
-  return new Date(`${date}T00:00:00`).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  })
-}
+import Link from "next/link"
 
 const EventsCard = ({ event }: { event: Event }) => {
   return (
@@ -47,10 +40,12 @@ const EventsCard = ({ event }: { event: Event }) => {
       </CardHeader>
 
       <div className="flex justify-start px-4 pb-4">
-        <Button className="gap-2 px-4">
-          View Event
-          <ArrowRight className="size-3.5" />
-        </Button>
+        <Link href={`/upcoming-events/${event._id}`}>
+          <Button className="gap-2 px-4">
+            View Event
+            <ArrowRight className="size-3.5" />
+          </Button>
+        </Link>
       </div>
     </Card>
   )

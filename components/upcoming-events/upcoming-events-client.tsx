@@ -78,36 +78,36 @@ export function UpcomingEventsClient({ events }: UpcomingEventsClientProps) {
               />
             </div>
 
-           <DropdownMenu>
-  <DropdownMenuTrigger
-    aria-label="Filter events"
-    render={<Button className="shrink-0 gap-2 px-3" />}
-  >
-    <SlidersHorizontal className="size-4" />
-    Filter
-  </DropdownMenuTrigger>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                aria-label="Filter events"
+                render={<Button className="shrink-0 gap-2 px-3" />}
+              >
+                <SlidersHorizontal className="size-4" />
+                Filter
+              </DropdownMenuTrigger>
 
-  <DropdownMenuContent align="end" className="w-48">
-    <DropdownMenuGroup>
-      <DropdownMenuLabel>Filter by category</DropdownMenuLabel>
-    </DropdownMenuGroup>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>Filter by category</DropdownMenuLabel>
+                </DropdownMenuGroup>
 
-    <DropdownMenuRadioGroup
-      value={category}
-      onValueChange={(value) => setCategory(String(value))}
-    >
-      <DropdownMenuRadioItem value={ALL_EVENTS}>
-        All events
-      </DropdownMenuRadioItem>
+                <DropdownMenuRadioGroup
+                  value={category}
+                  onValueChange={(value) => setCategory(String(value))}
+                >
+                  <DropdownMenuRadioItem value={ALL_EVENTS}>
+                    All events
+                  </DropdownMenuRadioItem>
 
-      {categories.map((eventType) => (
-        <DropdownMenuRadioItem key={eventType} value={eventType}>
-          {eventType}
-        </DropdownMenuRadioItem>
-      ))}
-    </DropdownMenuRadioGroup>
-  </DropdownMenuContent>
-</DropdownMenu>
+                  {categories.map((eventType) => (
+                    <DropdownMenuRadioItem key={eventType} value={eventType}>
+                      {eventType}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
 
