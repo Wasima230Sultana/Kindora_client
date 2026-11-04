@@ -13,22 +13,12 @@ type PageProps = {
 const EventDetailsPage = async ({ params }: PageProps) => {
     const { id } = await params
 
-    const token = await getTokenFromServer();
-
-console.log("Token exists:", !!token);
-console.log("Token length:", token?.length);
-
-if (!token) {
-  throw new Error("JWT token is missing");
-}
 
 const res = await fetch(
-  `http://localhost:8000/upcoming-events/${id}`,
+  `${process.env.NEXT_PUBLIC_API_URL}/upcoming-events/${id}`,
   {
     cache: "no-store",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+   
   }
 );
 
@@ -50,28 +40,6 @@ const result: Event = JSON.parse(responseText);
 
 
 
-// const token = await getTokenFromServer()
-// console.log("Token exists:", !!token);
-// console.log("Token length:", token?.length);
-//     const res = await fetch(
-//         `http://localhost:8000/upcoming-events/${id}`,
-//         {
-//             cache: "no-store",
-//              headers:{
-//           authorization: `Bearer ${token}`
-//         }
-//         }
-//     )
-
-//     if (res.status === 404) {
-//         notFound()
-//     }
-
-//     if (!res.ok) {
-//         throw new Error("Failed to fetch event details")
-//     }
-
-//     const result: Event = await res.json()
 
 
     return (
