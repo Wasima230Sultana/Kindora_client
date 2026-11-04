@@ -7,12 +7,11 @@ import {
   Heart,
   LogOut,
   Menu,
-  Moon,
+
   Settings,
-  Sun,
+
   UserRound,
 } from "lucide-react"
-import { useTheme } from "next-themes"
 import Link from "next/link"
 import {
   Tooltip,

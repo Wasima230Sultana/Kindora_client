@@ -3,7 +3,7 @@ import { FeatureStrip } from "@/components/home/feature-strip"
 import { OurGallery } from "@/components/home/our-gallery"
 import { PreviousEventsPage } from "@/components/home/previous-events"
 import { RecentUpcomingEvents } from "@/components/home/recent-upcoming-events"
-export const dynamic = "force-dynamic"
+// export const dynamic = "force-dynamic"
 
 export default function Page() {
   return (
