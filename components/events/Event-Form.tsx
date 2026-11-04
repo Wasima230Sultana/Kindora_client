@@ -25,8 +25,18 @@ import { authClient } from "@/lib/auth-client";
 import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 
-const eventTypes = ["Registration", "Donation", "Cleanup"]
-
+const eventTypes = [
+  "Registration",
+  "Donation",
+  "Cleanup",
+  "Relief",
+  "Fundraising",
+  "Awareness",
+  "Volunteering",
+  "Distribution",
+  "Training",
+  "Campaign",
+]
 type FieldName =
     "title" | "eventType" | "image" | "location" | "date" | "description"
 
@@ -132,7 +142,7 @@ console.log(eventData)
             console.log("Event created successfully:", data)
 
             // Navigate to upcoming events page
-            router.push("/upcoming-events")
+            router.push("/manage-event")
             router.refresh()
 
         } catch (error) {

@@ -2,18 +2,14 @@ import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 import EventsCard from "../Card/EventsCard"
 import type { Event } from "../type/type"
-import { getTokenFromServer } from "@/lib/getTokenFromServer"
 
 export async function RecentUpcomingEvents() {
   let events: Event[] = []
 
   try {
-    const token = await getTokenFromServer()
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/create-event`, {
       cache: "no-store",
-      headers:{
-        authorization : `Bearer ${token}`
-      }
+      
     })
 
     if (!res.ok) {

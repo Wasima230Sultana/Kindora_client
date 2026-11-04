@@ -4,7 +4,18 @@ import { useSyncExternalStore, useState, type FormEvent } from "react"
 import EventForm from "@/components/events/Event-Form"
 import { CalendarCheck, Leaf, Send } from "lucide-react"
 
-const eventTypes = ["Registration", "Donation", "Cleanup"]
+const eventTypes = [
+  "Registration",
+  "Donation",
+  "Cleanup",
+  "Relief",
+  "Fundraising",
+  "Awareness",
+  "Volunteering",
+  "Distribution",
+  "Training",
+  "Campaign",
+]
 
 type FieldName =
   "title" | "eventType" | "image" | "location" | "date" | "description"

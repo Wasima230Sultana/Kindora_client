@@ -60,10 +60,7 @@ const EventsCard = ({ event }: { event: Event }) => {
 
       <div className="flex items-center justify-between gap-3 px-4 pb-4">
         <Link
-          href={
-            user
-              ? `/upcoming-events/${event._id}`
-              : "/login"
+          href={`/upcoming-events/${event._id}`
           }
         >
           <Button className="gap-2 px-4">

@@ -1,14 +1,14 @@
 'use client'
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Event } from "../type/type";
 import { redirect } from "next/navigation";
@@ -35,8 +35,18 @@ import { Textarea } from "@/components/ui/textarea"
 import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 
-const eventTypes = ["Registration", "Donation", "Cleanup"]
-
+const eventTypes = [
+  "Registration",
+  "Donation",
+  "Cleanup",
+  "Relief",
+  "Fundraising",
+  "Awareness",
+  "Volunteering",
+  "Distribution",
+  "Training",
+  "Campaign",
+]
 type FieldName =
     "title" | "eventType" | "image" | "location" | "date" | "description"
 
@@ -53,7 +63,7 @@ const subscribeNoop = () => () => { }
 const EditEvents = ({ result }: { result: Event }) => {
     const router = useRouter()
     const [errors, setErrors] = useState<FormErrors>({})
-
+    const [eventType, setEventType] = useState(result.eventType || "")
     // The page is prerendered at build time: read "today" on the client only, so
     // the date picker's `min` bound is accurate and hydration stays consistent.
     const minDate = useSyncExternalStore(subscribeNoop, getTodayIso, () => "")
@@ -64,224 +74,232 @@ const EditEvents = ({ result }: { result: Event }) => {
         )
     }
 
-  const handleUpdateEvent = async (
-  event: React.FormEvent<HTMLFormElement>
-) => {
-  event.preventDefault();
+    const handleUpdateEvent = async (
+        event: React.FormEvent<HTMLFormElement>
+    ) => {
+        event.preventDefault();
 
-  const form = event.currentTarget;
-  const formData = new FormData(form);
+        const form = event.currentTarget;
+        const formData = new FormData(form);
 
-  const eventData = {
-    title: formData.get("title"),
-    eventType: formData.get("eventType"),
-    image: formData.get("image"),
-    location: formData.get("location"),
-    date: formData.get("date"),
-    description: formData.get("description"),
-  };
+        const eventData = {
+            title: formData.get("title"),
+            eventType: formData.get("eventType"),
+            image: formData.get("image"),
+            location: formData.get("location"),
+            date: formData.get("date"),
+            description: formData.get("description"),
+        };
 
-  try {
-    const token = await getTokenFromClient()
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/upcoming-events/${result._id}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          authorization : `Bearer ${token}`
-        },
-        body: JSON.stringify(eventData),
-      }
-    );
+        try {
+            const token = await getTokenFromClient()
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/manage-event/${result._id}`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                        authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify(eventData),
+                }
+            );
 
-    if (!res.ok) {
-      throw new Error("Failed to update event");
-    }
+            if (!res.ok) {
+                const errorData = await res.json()
+                throw new Error(errorData.message || "Failed to update event")
+            }
 
-    router.push("/upcoming-events");
-  } catch (error) {
-    console.error("Update event error:", error);
-  }
-};
+            console.log("Event updated successfully!")
+
+            console.log("Before redirect")
+
+            window.location.href = "/manage-event"
+
+            console.log("After redirect")
+        } catch (error) {
+            console.error("Update event error:", error);
+        }
+    };
     return (
-        
-<AlertDialog>
-  <AlertDialogTrigger
-    render={
-      <Button className="bg-violet-600 text-white" variant="outline">
-        Edit
-      </Button>
-    }
-  />
 
-  <AlertDialogContent className="flex max-h-[90vh] w-[95vw] max-w-3xl flex-col gap-0 overflow-hidden p-0">
+        <AlertDialog>
+            <AlertDialogTrigger
+                render={
+                    <Button className="bg-violet-600 text-white" variant="outline">
+                        Edit
+                    </Button>
+                }
+            />
 
-    {/* Fixed Header */}
-    <AlertDialogHeader className="shrink-0 border-b px-6 py-5">
-      <AlertDialogTitle>
-        Update the information
-      </AlertDialogTitle>
+            <AlertDialogContent className="flex max-h-[90vh] w-[95vw] max-w-3xl flex-col gap-0 overflow-hidden p-0">
 
-      <AlertDialogDescription>
-        Update your event details using the form below.
-      </AlertDialogDescription>
-    </AlertDialogHeader>
+                {/* Fixed Header */}
+                <AlertDialogHeader className="shrink-0 border-b px-6 py-5">
+                    <AlertDialogTitle>
+                        Update the information
+                    </AlertDialogTitle>
 
-    {/* Scrollable Form */}
-    <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
-      <Form onSubmit={handleUpdateEvent} className="mt-0">
+                    <AlertDialogDescription>
+                        Update your event details using the form below.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
 
-            <FieldGroup className="grid gap-5 sm:grid-cols-2">
-                                <Field>
-                                    <FieldLabel htmlFor="event-title">
-                                        Event Title{" "}
-                                        <span className="text-destructive" aria-hidden>
-                                            *
-                                        </span>
-                                    </FieldLabel>
-                                    <Input
-                                        id="event-title"
-                                        name="title"
-                                        placeholder="Enter event title"
-                                         defaultValue={result.title}
-                                        required
-                                        aria-invalid={errors.title ? true : undefined}
-                                        onChange={() => clearError("title")}
-                                    />
-                                    <FieldError>{errors.title}</FieldError>
-                                </Field>
+                {/* Scrollable Form */}
+                <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
+                    <Form onSubmit={handleUpdateEvent} className="mt-0">
 
-                                <Field>
-                                    <FieldLabel htmlFor="event-type">
-                                        Event Type{" "}
-                                        <span className="text-destructive" aria-hidden>
-                                            *
-                                        </span>
-                                    </FieldLabel>
-                                    <Select
-                                        id="event-type"
-                                        name="eventType"
-                                        defaultValue={result.eventType}
-                                        required
-                                        onValueChange={() => clearError("eventType")}
+                        <FieldGroup className="grid gap-5 sm:grid-cols-2">
+                            <Field>
+                                <FieldLabel htmlFor="event-title">
+                                    Event Title{" "}
+                                    <span className="text-destructive" aria-hidden>
+                                        *
+                                    </span>
+                                </FieldLabel>
+                                <Input
+                                    id="event-title"
+                                    name="title"
+                                    placeholder="Enter event title"
+                                    defaultValue={result.title}
+                                    required
+                                    aria-invalid={errors.title ? true : undefined}
+                                    onChange={() => clearError("title")}
+                                />
+                                <FieldError>{errors.title}</FieldError>
+                            </Field>
+
+                            <Field>
+                                <FieldLabel htmlFor="event-type">
+                                    Event Type{" "}
+                                    <span className="text-destructive" aria-hidden>
+                                        *
+                                    </span>
+                                </FieldLabel>
+                                <Select
+                                    value={eventType}
+                                    onValueChange={(value) => {
+                                        setEventType(value ?? "")
+                                        clearError("eventType")
+                                    }}
+                                    name="eventType"
+                                >
+                                    <SelectTrigger
+                                        className="w-full"
+                                        aria-invalid={errors.eventType ? true : undefined}
                                     >
-                                        <SelectTrigger
-                                            className="w-full"
-                                            aria-invalid={errors.eventType ? true : undefined}
-                                        >
-                                            <SelectValue placeholder="Select event type" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {eventTypes.map((type) => (
-                                                <SelectItem key={type} value={type}>
-                                                    {type}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    <FieldError>{errors.eventType}</FieldError>
-                                </Field>
+                                        <SelectValue placeholder="Select event type" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {eventTypes.map((type) => (
+                                            <SelectItem key={type} value={type}>
+                                                {type}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                <FieldError>{errors.eventType}</FieldError>
+                            </Field>
 
-                                <Field className="sm:col-span-2">
-                                    <FieldLabel htmlFor="event-image">
-                                        Thumbnail Image URL{" "}
-                                        <span className="text-destructive" aria-hidden>
-                                            *
-                                        </span>
-                                    </FieldLabel>
-                                    <Input
-                                        id="event-image"
-                                        name="image"
-                                        type="url"
-                                        defaultValue={result.image as string}
-                                        placeholder="https://example.com/image.jpg"
-                                        required
-                                        aria-invalid={errors.image ? true : undefined}
-                                        onChange={() => clearError("image")}
-                                    />
-                                    <FieldError>{errors.image}</FieldError>
-                                </Field>
+                            <Field className="sm:col-span-2">
+                                <FieldLabel htmlFor="event-image">
+                                    Thumbnail Image URL{" "}
+                                    <span className="text-destructive" aria-hidden>
+                                        *
+                                    </span>
+                                </FieldLabel>
+                                <Input
+                                    id="event-image"
+                                    name="image"
+                                    type="url"
+                                    defaultValue={result.image as string}
+                                    placeholder="https://example.com/image.jpg"
+                                    required
+                                    aria-invalid={errors.image ? true : undefined}
+                                    onChange={() => clearError("image")}
+                                />
+                                <FieldError>{errors.image}</FieldError>
+                            </Field>
 
-                                <Field>
-                                    <FieldLabel htmlFor="event-location">
-                                        Location{" "}
-                                        <span className="text-destructive" aria-hidden>
-                                            *
-                                        </span>
-                                    </FieldLabel>
-                                    <Input
-                                        id="event-location"
-                                        name="location"
-                                        placeholder="Enter location"
-                                        defaultValue={result.location}
-                                        required
-                                        aria-invalid={errors.location ? true : undefined}
-                                        onChange={() => clearError("location")}
-                                    />
-                                    <FieldError>{errors.location}</FieldError>
-                                </Field>
+                            <Field>
+                                <FieldLabel htmlFor="event-location">
+                                    Location{" "}
+                                    <span className="text-destructive" aria-hidden>
+                                        *
+                                    </span>
+                                </FieldLabel>
+                                <Input
+                                    id="event-location"
+                                    name="location"
+                                    placeholder="Enter location"
+                                    defaultValue={result.location}
+                                    required
+                                    aria-invalid={errors.location ? true : undefined}
+                                    onChange={() => clearError("location")}
+                                />
+                                <FieldError>{errors.location}</FieldError>
+                            </Field>
 
-                                <Field>
-                                    <FieldLabel htmlFor="event-date">
-                                        Event Date{" "}
-                                        <span className="text-destructive" aria-hidden>
-                                            *
-                                        </span>
-                                    </FieldLabel>
-                                    <Input
-                                        id="event-date"
-                                        name="date"
-                                        type="date"
-                                        defaultValue={result.date}
-                                        min={minDate}
-                                        required
-                                        aria-invalid={errors.date ? true : undefined}
-                                        onChange={() => clearError("date")}
-                                    />
-                                    <FieldError>{errors.date}</FieldError>
-                                </Field>
+                            <Field>
+                                <FieldLabel htmlFor="event-date">
+                                    Event Date{" "}
+                                    <span className="text-destructive" aria-hidden>
+                                        *
+                                    </span>
+                                </FieldLabel>
+                                <Input
+                                    id="event-date"
+                                    name="date"
+                                    type="date"
+                                    defaultValue={result.date}
+                                    min={minDate}
+                                    required
+                                    aria-invalid={errors.date ? true : undefined}
+                                    onChange={() => clearError("date")}
+                                />
+                                <FieldError>{errors.date}</FieldError>
+                            </Field>
 
-                                <Field className="sm:col-span-2">
-                                    <FieldLabel htmlFor="event-description">
-                                        Description{" "}
-                                        <span className="text-destructive" aria-hidden>
-                                            *
-                                        </span>
-                                    </FieldLabel>
-                                    <Textarea
-                                        id="event-description"
-                                        name="description"
-                                        placeholder="Tell us more about this event..."
-                                        defaultValue={result.description}
-                                        rows={4}
-                                        required
-                                        aria-invalid={errors.description ? true : undefined}
-                                        onChange={() => clearError("description")}
-                                    />
-                                    <FieldError>{errors.description}</FieldError>
-                                </Field>
+                            <Field className="sm:col-span-2">
+                                <FieldLabel htmlFor="event-description">
+                                    Description{" "}
+                                    <span className="text-destructive" aria-hidden>
+                                        *
+                                    </span>
+                                </FieldLabel>
+                                <Textarea
+                                    id="event-description"
+                                    name="description"
+                                    placeholder="Tell us more about this event..."
+                                    defaultValue={result.description}
+                                    rows={4}
+                                    required
+                                    aria-invalid={errors.description ? true : undefined}
+                                    onChange={() => clearError("description")}
+                                />
+                                <FieldError>{errors.description}</FieldError>
+                            </Field>
 
-                            </FieldGroup>
+                        </FieldGroup>
 
-          {/* Fixed Footer */}
-    <AlertDialogFooter className="shrink-0 border-t bg-white px-6 py-4">
-      <AlertDialogCancel>
-        Cancel
-      </AlertDialogCancel>
+                        {/* Fixed Footer */}
+                        <AlertDialogFooter className="shrink-0 border-t bg-white px-6 py-4">
+                            <AlertDialogCancel className="bg-blue-300 text-black hover:bg-blue-400 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600">
+                                Cancel
+                            </AlertDialogCancel>
 
-      
-       <Button type="submit" className="bg-violet-600 text-white">
-          Update
-        </Button>
-    </AlertDialogFooter>
-      </Form>
-    </div>
 
- 
+                            <Button type="submit" className="bg-violet-600 text-white">
+                                Update
+                            </Button>
+                        </AlertDialogFooter>
+                    </Form>
+                </div>
 
-  </AlertDialogContent>
-</AlertDialog>
+
+
+            </AlertDialogContent>
+        </AlertDialog>
 
     );
 };

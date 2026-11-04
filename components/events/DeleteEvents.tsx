@@ -26,7 +26,7 @@ const DeleteEvents = ({ result }: { result: Event }) => {
           
         })
         await res.json()
-        redirect('/upcoming-events')
+        redirect('/manage-event')
     }
     return (
       <AlertDialog>

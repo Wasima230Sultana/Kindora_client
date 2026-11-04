@@ -47,11 +47,12 @@ const token = await getTokenFromServer()
       </h2>
 
       {events.length > 0 ? (
-        <div className="space-y-5">
-          {events.map((event) => (
-            <ManageCard key={event._id} event={event} />
-          ))}
-        </div>
+
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+  {events.map((event) => (
+    <ManageCard key={event._id} event={event} />
+  ))}
+</div>
       ) : (
         <p>You haven&apos;t created any events yet.</p>
       )}

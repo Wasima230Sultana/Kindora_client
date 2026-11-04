@@ -84,7 +84,7 @@ export const events: EventItem[] = [
     tagClassName:
       "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300",
     location: "Mirpur 10, Dhaka",
-    date: "Nov 12, 2026",
+    date: "Nov 1, 2026",
     joined: 18,
     image: unsplash("1542601906990-b4d3fb778b09", 640, 400),
     imageAlt: "Hands holding a young seedling in soil",
@@ -96,7 +96,7 @@ export const events: EventItem[] = [
     tagClassName:
       "bg-sky-100 text-sky-700 dark:bg-sky-500/20 dark:text-sky-300",
     location: "Mohammadpur, Dhaka",
-    date: "Nov 20, 2026",
+    date: "Nov 2, 2026",
     joined: 65,
     image: unsplash("1532629345422-7515f3d16bb6", 640, 400),
     imageAlt: "Hands holding a handwritten make a change note with coins",
@@ -108,7 +108,7 @@ export const events: EventItem[] = [
     tagClassName:
       "bg-orange-100 text-orange-700 dark:bg-orange-500/20 dark:text-orange-300",
     location: "Gulshan, Dhaka",
-    date: "Nov 25, 2026",
+    date: "Nov 7, 2026",
     joined: 72,
     image: unsplash("1526951521990-620dc14c214b", 640, 400),
     imageAlt: "Plastic waste washed up on a beach ready to be cleaned",

@@ -1,14 +1,12 @@
 import React from 'react';
 import { Event } from '../type/type';
 import {
-    ArrowLeft,
     CalendarDays,
     MapPin,
     Users,
-    Mail,
-    Heart,
     HandHeart,
     CalendarCheck,
+    UserRound,
 } from "lucide-react"
 import Image from "next/image";
 import MyJoinedEvent from '../events/MyJoinedEvent';
@@ -86,48 +84,67 @@ const EventDetailsCard = async ({ result }: { result: Event }) => {
 
                         </div>
 
-                        {/* Event Information */}
-                        <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
 
-                            <h2 className="mb-5 text-lg font-bold text-gray-900">
-                                Event Information
-                            </h2>
+{/* Event Information */}
+<div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
 
-                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <h2 className="mb-5 text-lg font-bold text-gray-900">
+        Event Information
+    </h2>
 
-                                <div className="flex items-center gap-3 rounded-xl bg-purple-50 p-4">
-                                    <div className="rounded-lg bg-white p-2 text-purple-600">
-                                        <CalendarCheck size={21} />
-                                    </div>
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
-                                    <div>
-                                        <p className="text-xs text-gray-500">
-                                            Event Date
-                                        </p>
-                                        <p className="mt-1 text-sm font-semibold text-gray-800">
-                                            {result.date}
-                                        </p>
-                                    </div>
-                                </div>
+        <div className="flex items-center gap-3 rounded-xl bg-purple-50 p-4">
+            <div className="rounded-lg bg-white p-2 text-purple-600">
+                <CalendarCheck size={21} />
+            </div>
 
-                                <div className="flex items-center gap-3 rounded-xl bg-purple-50 p-4">
-                                    <div className="rounded-lg bg-white p-2 text-purple-600">
-                                        <MapPin size={21} />
-                                    </div>
+            <div>
+                <p className="text-xs text-gray-500">Event Date</p>
+                <p className="mt-1 text-sm font-semibold text-gray-800">
+                    {result.date}
+                </p>
+            </div>
+        </div>
 
-                                    <div>
-                                        <p className="text-xs text-gray-500">
-                                            Event Location
-                                        </p>
-                                        <p className="mt-1 text-sm font-semibold text-gray-800">
-                                            {result.location}
-                                        </p>
-                                    </div>
-                                </div>
+        <div className="flex items-center gap-3 rounded-xl bg-purple-50 p-4">
+            <div className="rounded-lg bg-white p-2 text-purple-600">
+                <MapPin size={21} />
+            </div>
 
-                            </div>
-                        </div>
+            <div>
+                <p className="text-xs text-gray-500">Event Location</p>
+                <p className="mt-1 text-sm font-semibold text-gray-800">
+                    {result.location}
+                </p>
+            </div>
+        </div>
 
+    </div>
+</div>
+
+{/* Organizer Information - Added after Event Information */}
+<div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+
+    <div className="mb-3 flex items-center gap-2">
+        <div className="rounded-lg bg-purple-100 p-2 text-purple-600">
+            <UserRound size={18} />
+        </div>
+
+        <h3 className="text-lg font-bold text-gray-900">
+            Organized By
+        </h3>
+    </div>
+
+    <p className="text-sm font-semibold text-gray-800">
+        Event Organizer
+    </p>
+
+    <p className="mt-1 break-all text-sm text-gray-500">
+        {result.creatorEmail}
+    </p>
+
+</div>
                     </section>
 
                     {/* RIGHT SIDE - JOIN EVENT CARD */}
