@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { authClient } from "@/lib/auth-client";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 
 const eventTypes = ["Registration", "Donation", "Cleanup"]
@@ -112,10 +113,12 @@ console.log(eventData)
         }
 
         try {
-            const res = await fetch("http://localhost:8000/create-event", {
+            const token = await getTokenFromClient()
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/create-event`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    authorization:`Bearer ${token}`
                 },
                 body: JSON.stringify(eventData),
             })

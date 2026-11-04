@@ -5,32 +5,73 @@ import {
 } from "lucide-react"
 import { notFound } from "next/navigation"
 import { Event } from "@/components/type/type";
-import { Button } from "@/components/ui/button";
 import EventDetailsCard from "@/components/Card/EventDetailsCard";
-import DeleteEvents from "@/components/events/DeleteEvents";
-import EditEvents from "@/components/events/EditEvents";
+import { getTokenFromServer } from "@/lib/getTokenFromServer";
 type PageProps = {
     params: Promise<{ id: string }>;
 };
 const EventDetailsPage = async ({ params }: PageProps) => {
     const { id } = await params
 
-    const res = await fetch(
-        `http://localhost:8000/upcoming-events/${id}`,
-        {
-            cache: "no-store",
-        }
-    )
+    const token = await getTokenFromServer();
 
-    if (res.status === 404) {
-        notFound()
-    }
+console.log("Token exists:", !!token);
+console.log("Token length:", token?.length);
 
-    if (!res.ok) {
-        throw new Error("Failed to fetch event details")
-    }
+if (!token) {
+  throw new Error("JWT token is missing");
+}
 
-    const result: Event = await res.json()
+const res = await fetch(
+  `http://localhost:8000/upcoming-events/${id}`,
+  {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
+
+console.log("Response status:", res.status);
+
+const responseText = await res.text();
+
+console.log("Response body:", responseText);
+
+if (res.status === 404) {
+  notFound();
+}
+
+if (!res.ok) {
+  throw new Error(`Failed to fetch event details: ${res.status}`);
+}
+
+const result: Event = JSON.parse(responseText);
+
+
+
+// const token = await getTokenFromServer()
+// console.log("Token exists:", !!token);
+// console.log("Token length:", token?.length);
+//     const res = await fetch(
+//         `http://localhost:8000/upcoming-events/${id}`,
+//         {
+//             cache: "no-store",
+//              headers:{
+//           authorization: `Bearer ${token}`
+//         }
+//         }
+//     )
+
+//     if (res.status === 404) {
+//         notFound()
+//     }
+
+//     if (!res.ok) {
+//         throw new Error("Failed to fetch event details")
+//     }
+
+//     const result: Event = await res.json()
 
 
     return (

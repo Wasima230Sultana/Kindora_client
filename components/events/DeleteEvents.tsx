@@ -13,12 +13,15 @@ import {
 import { Button } from "@/components/ui/button"
 import { Event } from '../type/type';
 import { redirect } from 'next/navigation';
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 const DeleteEvents = ({ result }: { result: Event }) => {
     const handleDelete = async()=>{
-        const res = await fetch(`http://localhost:8000/upcoming-events/${result._id}`,{
+      const token = await getTokenFromClient()
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/upcoming-events/${result._id}`,{
             method:'DELETE',
             headers:{
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                authorization : `Bearer ${token}`
             },
           
         })

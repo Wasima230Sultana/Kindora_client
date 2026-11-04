@@ -3,6 +3,7 @@ import MyJoinedEventCard from "@/components/Card/MyJoinedEventCard"
 import { JoinedEvent } from "@/components/type/joinedDataType"
 import { Button } from "@/components/ui/button"
 import { auth } from "@/lib/auth"
+import { getTokenFromServer } from "@/lib/getTokenFromServer"
 import { CalendarDays } from "lucide-react"
 import { headers } from "next/headers"
 import Link from "next/link"
@@ -19,11 +20,14 @@ const JoinedEventPage = async () => {
     if (!user?.email) {
         redirect("/login")
     }
-
+const token = await getTokenFromServer();
     const res = await fetch(
-        `http://localhost:8000/joined-event/${user.email}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/joined-event/${user.email}`,
         {
             cache: "no-store",
+            headers:{
+                authorization : `Bearer ${token}`
+            }
         }
     )
 

@@ -3,6 +3,7 @@
 import ManageCard from '@/components/Card/ManagedCard';
 import { Event } from '@/components/type/type';
 import { auth } from '@/lib/auth';
+import { getTokenFromServer } from '@/lib/getTokenFromServer';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -16,10 +17,14 @@ const ManageEventPage = async () => {
   if (!user?.email) {
     redirect('/login');
   }
-
+const token = await getTokenFromServer()
   const res = await fetch(
-    `http://localhost:8000/manage-event/${user.email}`,
-    { cache: 'no-store' }
+    `${process.env.NEXT_PUBLIC_API_URL}/manage-event/${user.email}`,
+    { cache: 'no-store' ,
+      headers:{
+        authorization : `Bearer ${token}`
+      }
+    }
   );
 
   if (!res.ok) {

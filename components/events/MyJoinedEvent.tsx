@@ -4,6 +4,7 @@ import { Button, Form } from '@base-ui/react';
 import { Heart } from 'lucide-react';
 
 import { Event } from '../type/type';
+import { getTokenFromClient } from '@/lib/getTokenFromClient';
 
 
 const MyJoinedEvent = ({result}:{result:Event}) => {
@@ -19,11 +20,12 @@ const handleSubmit=async(e: React.SubmitEvent<HTMLElement>)=>{
         joinedDate : new Date()
     }
     console.log(data)
-  
-    const res = await fetch('http://localhost:8000/joined-event',{
+  const token = await getTokenFromClient()
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/joined-event`,{
         method:'POST',
         headers:{
-            'Content-Type':'application/json'
+            'Content-Type':'application/json',
+            authorization : `Bearer ${token}`
         
         },
         body:JSON.stringify(data)

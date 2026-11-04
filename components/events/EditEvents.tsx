@@ -32,6 +32,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 
 const eventTypes = ["Registration", "Donation", "Cleanup"]
@@ -81,12 +82,14 @@ const EditEvents = ({ result }: { result: Event }) => {
   };
 
   try {
+    const token = await getTokenFromClient()
     const res = await fetch(
-      `http://localhost:8000/upcoming-events/${result._id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/upcoming-events/${result._id}`,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          authorization : `Bearer ${token}`
         },
         body: JSON.stringify(eventData),
       }

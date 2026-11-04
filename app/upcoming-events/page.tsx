@@ -1,12 +1,17 @@
 import type { Event } from "@/components/type/type"
 import { UpcomingEventsClient } from "@/components/upcoming-events/upcoming-events-client"
+import { getTokenFromServer } from "@/lib/getTokenFromServer"
 
 export default async function UpcomingEventsPage() {
   let events: Event[] = []
 
   try {
-    const res = await fetch("http://localhost:8000/upcoming-events", {
+    const token = await getTokenFromServer()
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/upcoming-events`, {
       cache: "no-store",
+      headers:{
+            authorization :`Bearer ${token}`
+      }
     })
 
     if (!res.ok) {
