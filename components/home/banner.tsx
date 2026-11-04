@@ -5,8 +5,11 @@ import { Avatar, AvatarGroup, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { avatarImages, heroImage } from "@/lib/data"
 import Link from "next/link"
+import { authClient } from "@/lib/auth-client"
 
-export function Banner() {
+export async function Banner() {
+    const {data:session} = await authClient.getSession()
+    const user = session?.user
   return (
     <section
       id="home"
@@ -42,7 +45,7 @@ export function Banner() {
               </Button>
             </Link>
 
-            <Link href={"/create-event"}>
+            <Link href={user ? "/create-event" : "/login"}>
               <Button
                 variant="outline"
                 className="h-11 rounded-full border-primary/30 px-6 text-[0.9rem] text-primary hover:bg-primary/5 hover:text-primary"

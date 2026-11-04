@@ -20,9 +20,9 @@ export const avatarImages = [
 export const navLinks = [
   { label: "Home", href: "/" },
   { label: "Upcoming Events", href: "/upcoming-events" },
-  { label: "Previous Events", href: "#events" },
-  { label: "About", href: "#about" },
-  { label: "Gallery", href: "#gallery" },
+  // { label: "Previous Events", href: "#events" },
+  // { label: "About", href: "#about" },
+  // { label: "Gallery", href: "#gallery" },
   { label: "Contact", href: "#contact" },
 ]
 
@@ -153,10 +153,10 @@ export const footerLinkGroups = [
   {
     title: "Quick Links",
     links: [
-      { label: "Home", href: "#home" },
-      { label: "Upcoming Events", href: "#events" },
-      { label: "Create Event", href: "#home" },
-      { label: "About Us", href: "#about" },
+      { label: "Home", href: "/" },
+      { label: "Upcoming Events", href: "/upcoming-events" },
+      { label: "Create Event", href: "/" },
+      { label: "About Us", href: "/" },
     ],
   },
   {

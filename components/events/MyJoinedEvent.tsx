@@ -2,7 +2,7 @@
 import { authClient } from '@/lib/auth-client';
 import { Button, Form } from '@base-ui/react';
 import { Heart } from 'lucide-react';
-import { useState } from 'react';
+
 import { Event } from '../type/type';
 
 

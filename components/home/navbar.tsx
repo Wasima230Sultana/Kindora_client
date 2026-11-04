@@ -50,33 +50,6 @@ const userMenuLinks = [
   { label: "Profile", href: "/profile", icon: UserRound },
 ]
 
-// Client-only snapshot: false during SSR/hydration, true after — avoids the
-// banned setState-in-effect "mounted" pattern while still preventing a
-// theme-icon hydration mismatch (next-themes resolves the theme client-side).
-const subscribe = () => () => {}
-const getClientSnapshot = () => true
-const getServerSnapshot = () => false
-
-// function ThemeToggle() {
-//   const { resolvedTheme, setTheme } = useTheme()
-//   const mounted = React.useSyncExternalStore(
-//     subscribe,
-//     getClientSnapshot,
-//     getServerSnapshot
-//   )
-//   const isDark = mounted && resolvedTheme === "dark"
-
-//   return (
-//     <Button
-//       variant="ghost"
-//       size="icon"
-//       aria-label="Toggle color theme"
-//       onClick={() => setTheme(isDark ? "light" : "dark")}
-//     >
-//       {isDark ? <Sun /> : <Moon />}
-//     </Button>
-//   )
-// }
 
 function Logo() {
   return (
@@ -102,12 +75,13 @@ export function Navbar() {
   const pathname = usePathname()
   const { data: session } = authClient.useSession()
   const user = session?.user
-  const filteredLinks =
-    pathname === "/upcoming-events"
-      ? navLinks.filter(
-          (link) => link.href === "/" || link.href === "/upcoming-events"
-        )
-      : navLinks
+  // const filteredLinks =
+  //   pathname === "/upcoming-events"
+  //     ? navLinks.filter(
+  //         (link) => link.href === "/" || link.href === "/upcoming-events"
+  //       )
+  //     : navLinks;
+      
   const handleSignout = async () => {
     await authClient.signOut()
   }
@@ -122,7 +96,7 @@ export function Navbar() {
         <Logo />
 
         <nav className="hidden items-center gap-1 lg:flex">
-          {filteredLinks.map((link) => {
+          {navLinks.map((link) => {
             const active = isActive(link.href)
 
             return (
@@ -241,7 +215,7 @@ export function Navbar() {
                 </SheetDescription>
               </SheetHeader>
               <nav className="flex flex-col gap-2 px-4 pb-4">
-                {filteredLinks.map((link) => {
+                {navLinks.map((link) => {
                   const active = isActive(link.href)
 
                   return (

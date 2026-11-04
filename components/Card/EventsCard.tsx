@@ -1,27 +1,46 @@
+
+"use client"
+
 import Image from "next/image"
 import { ArrowRight, CalendarDays, MapPin } from "lucide-react"
+import Link from "next/link"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatEventDate } from "@/lib/utils"
+import { authClient } from "@/lib/auth-client"
 import { Event } from "../type/type"
-import Link from "next/link"
 
 const EventsCard = ({ event }: { event: Event }) => {
+  // Get logged-in user session
+  const { data: session, isPending } = authClient.useSession()
+
+  const user = session?.user
+
+  // Show loading while checking authentication
+  if (isPending) {
+    return (
+      <Card className="h-72 animate-pulse rounded-2xl" />
+    )
+  }
+
   return (
     <Card className="relative overflow-hidden rounded-2xl pt-0 pb-0 transition-shadow hover:shadow-lg hover:shadow-primary/10">
       <div className="relative h-44 w-full">
         <Image
-          src={event.image}
-          alt={event.title}
-          fill
-          className="object-cover"
-          unoptimized
+        src={event.image}
+  alt={event.title}
+  fill
+  className="object-cover"
+  unoptimized
+  loading="eager"
         />
       </div>
 
-      <Badge className="absolute top-3 left-3">{event.eventType}</Badge>
+      <Badge className="absolute top-3 left-3">
+        {event.eventType}
+      </Badge>
 
       <CardHeader>
         <CardTitle className="font-heading text-base font-bold text-[#1e1b4b] dark:text-white">
@@ -40,14 +59,19 @@ const EventsCard = ({ event }: { event: Event }) => {
       </CardHeader>
 
       <div className="flex items-center justify-between gap-3 px-4 pb-4">
-
-    <Button className="gap-2 px-4">
-        <Link href={`/upcoming-events/${event._id}`}>
+        <Link
+          href={
+            user
+              ? `/upcoming-events/${event._id}`
+              : "/login"
+          }
+        >
+          <Button className="gap-2 px-4">
             View Event
             <ArrowRight className="size-3.5" />
+          </Button>
         </Link>
-    </Button>
-</div>
+      </div>
     </Card>
   )
 }

@@ -1,5 +1,4 @@
-"use client"
-
+'use client'
 import { useMemo, useState } from "react"
 import { Search, SlidersHorizontal } from "lucide-react"
 
