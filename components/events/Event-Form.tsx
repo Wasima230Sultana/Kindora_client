@@ -21,6 +21,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { authClient } from "@/lib/auth-client";
 
 
 const eventTypes = ["Registration", "Donation", "Cleanup"]
@@ -40,6 +41,8 @@ function getTodayIso() {
 const subscribeNoop = () => () => { }
 
 export default function EventForm() {
+      const { data: session } = authClient.useSession()
+        const user = session?.user
     const router = useRouter()
     const [errors, setErrors] = useState<FormErrors>({})
 
@@ -59,6 +62,13 @@ export default function EventForm() {
         const values = Object.fromEntries(
             new FormData(event.currentTarget).entries()
         ) as Record<string, string>
+
+        const eventData = {
+  ...values,
+  creatorName: user?.name ?? "",
+  creatorEmail: user?.email ?? "",
+};
+console.log(eventData)
 
         const nextErrors: FormErrors = {}
 
@@ -107,7 +117,7 @@ export default function EventForm() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(values),
+                body: JSON.stringify(eventData),
             })
 
             if (!res.ok) {

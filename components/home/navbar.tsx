@@ -46,7 +46,7 @@ import ThemeToggle from "../theme/ThemeToggle"
 const userMenuLinks = [
   { label: "Create Event", href: "/create-event", icon: CalendarPlus },
   { label: "Joined Event", href: "/joined-event", icon: CalendarCheck },
-  { label: "Manage Event", href: "#events", icon: Settings },
+  { label: "Manage Event", href: "/manage-event", icon: Settings },
   { label: "Profile", href: "/profile", icon: UserRound },
 ]
 

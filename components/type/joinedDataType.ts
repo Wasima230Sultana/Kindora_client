@@ -9,5 +9,5 @@ export type JoinedEvent = {
   date: string
   creatorName: string
   creatorEmail: string
-  joinedAt: string
+  joinedDate: string
 }

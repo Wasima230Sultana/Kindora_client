@@ -40,12 +40,6 @@ const EventsCard = ({ event }: { event: Event }) => {
       </CardHeader>
 
       <div className="flex items-center justify-between gap-3 px-4 pb-4">
-    <Button
-        variant="outline"
-        className="gap-2 px-4"
-    >
-        Cancel
-    </Button>
 
     <Button className="gap-2 px-4">
         <Link href={`/upcoming-events/${event._id}`}>

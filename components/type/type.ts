@@ -6,4 +6,6 @@ export type Event = {
   image: string
   location: string
   date: string
+  creatorName:string
+  creatorEmail:string
 }

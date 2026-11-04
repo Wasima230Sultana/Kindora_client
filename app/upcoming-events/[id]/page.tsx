@@ -45,10 +45,7 @@ const EventDetailsPage = async ({ params }: PageProps) => {
                         <ArrowLeft size={16} />
                         Back to Events
                     </Link>
-                    <div className="flex gap-5">
-                        <EditEvents result={result}></EditEvents>
-                        <DeleteEvents result={result}></DeleteEvents>
-                    </div>
+                   
 
                 </div>
                 <EventDetailsCard result={result}></EventDetailsCard>
