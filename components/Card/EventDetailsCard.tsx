@@ -11,15 +11,11 @@ import {
     CalendarCheck,
 } from "lucide-react"
 import Image from "next/image";
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
+import MyJoinedEvent from '../events/MyJoinedEvent';
+
 const EventDetailsCard = async ({ result }: { result: Event }) => {
-      const session = await auth.api.getSession({
-        headers: await headers()
-      });
-        const user = session?.user
-        console.log(user)
-    return (
+
+         return (
         <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
 
                     {/* LEFT SIDE - EVENT DETAILS */}
@@ -132,37 +128,6 @@ const EventDetailsCard = async ({ result }: { result: Event }) => {
                             </div>
                         </div>
 
-                        {/* Organizer */}
-                        <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-
-                            <h2 className="mb-5 text-lg font-bold text-gray-900">
-                                Event Organizer
-                            </h2>
-
-                            <div className="flex items-center gap-4">
-
-                                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-purple-100 text-xl font-bold text-purple-700">
-                                    {result.title.charAt(0).toUpperCase()}
-                                </div>
-
-                                <div className="min-w-0">
-                                    <h3 className="font-semibold text-gray-900">
-                                        {result.title}
-                                    </h3>
-
-                                    <p className="mt-1 flex items-center gap-2 break-all text-sm text-gray-500">
-                                        <Mail size={14} />
-                                        {user?.email}
-                                    </p>
-
-                                    <p className="mt-1 text-xs text-gray-400">
-                                        Event Organizer
-                                    </p>
-                                </div>
-
-                            </div>
-                        </div>
-
                     </section>
 
                     {/* RIGHT SIDE - JOIN EVENT CARD */}
@@ -226,15 +191,8 @@ const EventDetailsCard = async ({ result }: { result: Event }) => {
                                 </div>
 
                             </div>
-
-                            {/* Join Button - UI Only */}
-                            <button
-                                type="button"
-                                className="flex w-full items-center justify-center gap-2 rounded-xl bg-purple-600 px-5 py-3 text-sm font-semibold text-white shadow-md shadow-purple-200 transition duration-300 hover:-translate-y-1 hover:bg-purple-700 hover:shadow-lg"
-                            >
-                                <Heart size={17} />
-                                Join Event
-                            </button>
+<MyJoinedEvent result={result}></MyJoinedEvent>
+                            
 
                             <p className="mt-4 text-center text-xs leading-5 text-gray-400">
                                 Together, we can make a difference!

@@ -1,3 +1,4 @@
+
 import { Geist, Geist_Mono, Poppins } from "next/font/google"
 
 import "./globals.css"
@@ -6,7 +7,10 @@ import { cn } from "@/lib/utils"
 import { Navbar } from "@/components/home/navbar"
 import { Footer } from "@/components/home/footer"
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-sans",
+})
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
@@ -38,9 +42,14 @@ export default function RootLayout({
       )}
     >
       <body>
-        <ThemeProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           <Navbar />
-          {children}
+          <main>{children}</main>
           <Footer />
         </ThemeProvider>
       </body>

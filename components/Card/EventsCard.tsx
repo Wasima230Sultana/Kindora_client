@@ -39,14 +39,21 @@ const EventsCard = ({ event }: { event: Event }) => {
         </p>
       </CardHeader>
 
-      <div className="flex justify-start px-4 pb-4">
+      <div className="flex items-center justify-between gap-3 px-4 pb-4">
+    <Button
+        variant="outline"
+        className="gap-2 px-4"
+    >
+        Cancel
+    </Button>
+
+    <Button className="gap-2 px-4">
         <Link href={`/upcoming-events/${event._id}`}>
-          <Button className="gap-2 px-4">
             View Event
             <ArrowRight className="size-3.5" />
-          </Button>
         </Link>
-      </div>
+    </Button>
+</div>
     </Card>
   )
 }

@@ -1,0 +1,73 @@
+
+import MyJoinedEventCard from "@/components/Card/MyJoinedEventCard"
+import { JoinedEvent } from "@/components/type/joinedDataType"
+import { Button } from "@/components/ui/button"
+import { auth } from "@/lib/auth"
+import { CalendarDays } from "lucide-react"
+import { headers } from "next/headers"
+import Link from "next/link"
+import { redirect } from "next/navigation"
+
+const JoinedEventPage = async () => {
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    })
+
+    const user = session?.user
+
+    // Redirect if user is not logged in
+    if (!user?.email) {
+        redirect("/login")
+    }
+
+    const res = await fetch(
+        `http://localhost:8000/joined-event/${user.email}`,
+        {
+            cache: "no-store",
+        }
+    )
+
+    if (!res.ok) {
+        throw new Error("Failed to fetch joined events")
+    }
+
+    const joinedEvents: JoinedEvent[] = await res.json()
+
+    return (
+        <div className="mx-auto max-w-5xl space-y-5 px-4 py-10">
+
+            {joinedEvents.length > 0 ? (
+                joinedEvents.map((event) => (
+                    <MyJoinedEventCard
+                        key={event._id}
+                        event={event}
+                    />
+                ))
+            ) : (
+                <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-dashed border-gray-300 bg-gray-50 px-6 py-12 text-center dark:border-gray-700 dark:bg-gray-900/50">
+
+                    <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
+                        <CalendarDays className="h-8 w-8 text-green-600" />
+                    </div>
+
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                        No Joined Events Yet!
+                    </h3>
+
+                    <p className="mt-2 max-w-sm text-sm text-gray-500 dark:text-gray-400">
+                        You haven&apos;t joined any events yet. Explore upcoming
+                        events and participate in activities that make a difference.
+                    </p>
+
+                    <Button asChild className="mt-6 bg-green-600 hover:bg-green-700">
+                        <Link href="/upcoming-events">
+                            Explore Events
+                        </Link>
+                    </Button>
+                </div>
+            )}
+        </div>
+    )
+}
+
+export default JoinedEventPage
