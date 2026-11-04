@@ -58,14 +58,14 @@ const token = await getTokenFromServer();
 
     {/* Joined Events */}
     {joinedEvents.length > 0 ? (
-        <div className="space-y-5">
-            {joinedEvents.map((event) => (
-                <MyJoinedEventCard
-                    key={event._id}
-                    event={event}
-                />
-            ))}
-        </div>
+       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+    {joinedEvents.map((event) => (
+        <MyJoinedEventCard
+            key={event._id}
+            event={event}
+        />
+    ))}
+</div>
     ) : (
         <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-dashed border-gray-300 bg-gray-50 px-6 py-12 text-center dark:border-gray-700 dark:bg-gray-900/50">
 
