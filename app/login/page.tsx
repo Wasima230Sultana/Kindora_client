@@ -26,6 +26,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { authClient } from "@/lib/auth-client"
 import { cn } from "@/lib/utils"
+import Swal from "sweetalert2"
 
 type FieldName = "email" | "password"
 
@@ -64,7 +65,7 @@ function GoogleIcon() {
 export default function LoginPage() {
   const router = useRouter()
   const [errors, setErrors] = useState<FormErrors>({})
-  const [notice, setNotice] = useState<Notice | null>(null)
+  // const [notice, setNotice] = useState<Notice | null>(null)
   const [pending, setPending] = useState<null | "signin" | "google" | "reset">(
     null
   )
@@ -76,57 +77,81 @@ export default function LoginPage() {
     )
   }
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setNotice(null)
+ 
+const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  event.preventDefault()
 
-    const values = Object.fromEntries(
-      new FormData(event.currentTarget).entries()
-    ) as Record<string, string>
+  const values = Object.fromEntries(
+    new FormData(event.currentTarget).entries()
+  ) as Record<string, string>
 
-    const nextErrors: FormErrors = {}
-    if (!values.email?.trim()) {
-      nextErrors.email = "Email address is required"
-    } else if (!EMAIL_PATTERN.test(values.email.trim())) {
-      nextErrors.email = "Enter a valid email address"
-    }
-    if (!values.password) {
-      nextErrors.password = "Password is required"
-    }
+  const nextErrors: FormErrors = {}
 
-    setErrors(nextErrors)
-    if (Object.keys(nextErrors).length > 0) {
+  if (!values.email?.trim()) {
+    nextErrors.email = "Email address is required"
+  } else if (!EMAIL_PATTERN.test(values.email.trim())) {
+    nextErrors.email = "Enter a valid email address"
+  }
+
+  if (!values.password) {
+    nextErrors.password = "Password is required"
+  }
+
+  setErrors(nextErrors)
+
+  if (Object.keys(nextErrors).length > 0) {
+    await Swal.fire({
+      title: "Validation Error!",
+      text: "Please check your email and password.",
+      icon: "warning",
+      confirmButtonColor: "#7c3aed",
+    })
+    return
+  }
+
+  setPending("signin")
+
+  try {
+    const { data, error } = await authClient.signIn.email({
+      email: values.email.trim(),
+      password: values.password,
+      rememberMe: values.rememberMe === "on",
+    })
+
+    if (error) {
+      await Swal.fire({
+        title: "Login Failed!",
+        text: error.message ?? "Invalid email or password.",
+        icon: "error",
+        confirmButtonColor: "#7c3aed",
+      })
       return
     }
 
-    setPending("signin")
-    try {
-      const { data, error } = await authClient.signIn.email({
-        email: values.email.trim(),
-        password: values.password,
-        rememberMe: values.rememberMe === "on",
+    if (data) {
+      await Swal.fire({
+        title: "Welcome Back!",
+        text: "You have successfully signed in.",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
       })
 
-      if (error) {
-        setNotice({
-          type: "error",
-          text: error.message ?? "Invalid email or password.",
-        })
-        return
-      }
-      if (data) {
-        router.push("/")
-        router.refresh()
-      }
-    } catch {
-      setNotice({
-        type: "error",
-        text: "Something went wrong. Please try again.",
-      })
-    } finally {
-      setPending(null)
+      router.push("/")
+      router.refresh()
     }
+  } catch {
+    await Swal.fire({
+      title: "Something Went Wrong!",
+      text: "Please try again later.",
+      icon: "error",
+      confirmButtonColor: "#7c3aed",
+    })
+  } finally {
+    setPending(null)
   }
+}
+
 
   // const handleForgotPassword = async (event: MouseEvent<HTMLButtonElement>) => {
   //   const form = event.currentTarget.form
@@ -178,31 +203,39 @@ export default function LoginPage() {
   //   }
   // }
 
-  const handleGoogleSignIn = async () => {
-    setNotice(null)
-    setPending("google")
-    try {
-      const { error } = await authClient.signIn.social({
-        provider: "google",
-        callbackURL: "/",
-      })
+const handleGoogleSignIn = async () => {
+  setPending("google")
 
-      if (error) {
-        setNotice({
-          type: "error",
-          text: error.message ?? "Google sign-in is unavailable right now.",
-        })
-      }
-      // On success the client navigates to the provider automatically.
-    } catch {
-      setNotice({
-        type: "error",
-        text: "Something went wrong. Please try again.",
+  try {
+    const { error } = await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/",
+    })
+
+    if (error) {
+      await Swal.fire({
+        title: "Google Sign-in Failed!",
+        text: error.message ?? "Google sign-in is unavailable right now.",
+        icon: "error",
+        confirmButtonColor: "#7c3aed",
       })
-    } finally {
-      setPending(null)
     }
+
+    // On success, the client navigates automatically.
+  } catch {
+    await Swal.fire({
+      title: "Something Went Wrong!",
+      text: "Unable to sign in with Google. Please try again.",
+      icon: "error",
+      confirmButtonColor: "#7c3aed",
+    })
+  } finally {
+    setPending(null)
   }
+}
+
+
+ 
 
   return (
     <div className="min-h-svh">
@@ -327,7 +360,7 @@ export default function LoginPage() {
                     </button> */}
                   </div>
 
-                  {notice && (
+                  {/* {notice && (
                     <p
                       role="alert"
                       className={cn(
@@ -339,7 +372,7 @@ export default function LoginPage() {
                     >
                       {notice.text}
                     </p>
-                  )}
+                  )} */}
 
                   <Button
                     type="submit"

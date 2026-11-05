@@ -23,6 +23,7 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { authClient } from "@/lib/auth-client";
 import { getTokenFromClient } from "@/lib/getTokenFromClient";
+import Swal from "sweetalert2";
 
 
 const eventTypes = [
@@ -56,7 +57,7 @@ export default function EventForm() {
         const user = session?.user
     const router = useRouter()
     const [errors, setErrors] = useState<FormErrors>({})
-
+const [isPending, setIsPending] = useState(false)
     // The page is prerendered at build time: read "today" on the client only, so
     // the date picker's `min` bound is accurate and hydration stays consistent.
     const minDate = useSyncExternalStore(subscribeNoop, getTodayIso, () => "")
@@ -67,88 +68,212 @@ export default function EventForm() {
         )
     }
 
-    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
+const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  event.preventDefault()
 
-        const values = Object.fromEntries(
-            new FormData(event.currentTarget).entries()
-        ) as Record<string, string>
+  // Check login
+  if (!user?.email) {
+    await Swal.fire({
+      title: "Login Required!",
+      text: "Please log in before creating an event.",
+      icon: "warning",
+      confirmButtonColor: "#7c3aed",
+    })
+    return
+  }
 
-        const eventData = {
-  ...values,
-  creatorName: user?.name ?? "",
-  creatorEmail: user?.email ?? "",
-};
-console.log(eventData)
+  const values = Object.fromEntries(
+    new FormData(event.currentTarget).entries()
+  ) as Record<string, string>
 
-        const nextErrors: FormErrors = {}
+  const eventData = {
+    ...values,
+    creatorName: user.name ?? "",
+    creatorEmail: user.email,
+  }
 
-        if (!values.title?.trim()) {
-            nextErrors.title = "Event title is required"
-        }
+  const nextErrors: FormErrors = {}
 
-        if (!values.eventType) {
-            nextErrors.eventType = "Please select an event type"
-        }
+  if (!values.title?.trim()) {
+    nextErrors.title = "Event title is required"
+  }
 
-        if (!values.image?.trim()) {
-            nextErrors.image = "Thumbnail image URL is required"
-        } else {
-            try {
-                new URL(values.image)
-            } catch {
-                nextErrors.image = "Enter a valid URL (including https://)"
-            }
-        }
+  if (!values.eventType) {
+    nextErrors.eventType = "Please select an event type"
+  }
 
-        if (!values.location?.trim()) {
-            nextErrors.location = "Location is required"
-        }
-
-        if (!values.date) {
-            nextErrors.date = "Event date is required"
-        } else if (values.date < getTodayIso()) {
-            nextErrors.date = "Event date cannot be in the past"
-        }
-
-        if (!values.description?.trim()) {
-            nextErrors.description = "Description is required"
-        }
-
-        setErrors(nextErrors)
-
-        // Stop if validation fails
-        if (Object.keys(nextErrors).length > 0) {
-            return
-        }
-
-        try {
-            const token = await getTokenFromClient()
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/create-event`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    authorization:`Bearer ${token}`
-                },
-                body: JSON.stringify(eventData),
-            })
-
-            if (!res.ok) {
-                throw new Error("Failed to create event")
-            }
-
-            const data = await res.json()
-
-            console.log("Event created successfully:", data)
-
-            // Navigate to upcoming events page
-            router.push("/manage-event")
-            router.refresh()
-
-        } catch (error) {
-            console.error("Event creation error:", error)
-        }
+  if (!values.image?.trim()) {
+    nextErrors.image = "Thumbnail image URL is required"
+  } else {
+    try {
+      new URL(values.image)
+    } catch {
+      nextErrors.image = "Enter a valid URL (including https://)"
     }
+  }
+
+  if (!values.location?.trim()) {
+    nextErrors.location = "Location is required"
+  }
+
+  if (!values.date) {
+    nextErrors.date = "Event date is required"
+  } else if (values.date < getTodayIso()) {
+    nextErrors.date = "Event date cannot be in the past"
+  }
+
+  if (!values.description?.trim()) {
+    nextErrors.description = "Description is required"
+  }
+
+  setErrors(nextErrors)
+
+  // Validation alert
+  if (Object.keys(nextErrors).length > 0) {
+    await Swal.fire({
+      title: "Invalid Information!",
+      text: "Please complete all required fields correctly.",
+      icon: "warning",
+      confirmButtonColor: "#7c3aed",
+    })
+    return
+  }
+setIsPending(true)
+  try {
+    const token = await getTokenFromClient()
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/create-event`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(eventData),
+      }
+    )
+
+    if (!res.ok) {
+      throw new Error("Failed to create event. Please try again.")
+    }
+
+    const data = await res.json()
+
+    console.log("Event created successfully:", data)
+
+    // Success alert
+    await Swal.fire({
+      title: "Event Created!",
+      text: "Your event has been created successfully.",
+      icon: "success",
+      timer: 1800,
+      showConfirmButton: false,
+    })
+
+    router.push("/manage-event")
+    router.refresh()
+
+  } catch (error) {
+    console.error("Event creation error:", error)
+
+    await Swal.fire({
+      title: "Creation Failed!",
+      text:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again.",
+      icon: "error",
+      confirmButtonColor: "#7c3aed",
+    })
+  }
+  finally {
+  setIsPending(false)
+}
+}
+
+//     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+//         event.preventDefault()
+
+//         const values = Object.fromEntries(
+//             new FormData(event.currentTarget).entries()
+//         ) as Record<string, string>
+
+//         const eventData = {
+//   ...values,
+//   creatorName: user?.name ?? "",
+//   creatorEmail: user?.email ?? "",
+// };
+// console.log(eventData)
+
+//         const nextErrors: FormErrors = {}
+
+//         if (!values.title?.trim()) {
+//             nextErrors.title = "Event title is required"
+//         }
+
+//         if (!values.eventType) {
+//             nextErrors.eventType = "Please select an event type"
+//         }
+
+//         if (!values.image?.trim()) {
+//             nextErrors.image = "Thumbnail image URL is required"
+//         } else {
+//             try {
+//                 new URL(values.image)
+//             } catch {
+//                 nextErrors.image = "Enter a valid URL (including https://)"
+//             }
+//         }
+
+//         if (!values.location?.trim()) {
+//             nextErrors.location = "Location is required"
+//         }
+
+//         if (!values.date) {
+//             nextErrors.date = "Event date is required"
+//         } else if (values.date < getTodayIso()) {
+//             nextErrors.date = "Event date cannot be in the past"
+//         }
+
+//         if (!values.description?.trim()) {
+//             nextErrors.description = "Description is required"
+//         }
+
+//         setErrors(nextErrors)
+
+//         // Stop if validation fails
+//         if (Object.keys(nextErrors).length > 0) {
+//             return
+//         }
+
+//         try {
+//             const token = await getTokenFromClient()
+//             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/create-event`, {
+//                 method: "POST",
+//                 headers: {
+//                     "Content-Type": "application/json",
+//                     authorization:`Bearer ${token}`
+//                 },
+//                 body: JSON.stringify(eventData),
+//             })
+
+//             if (!res.ok) {
+//                 throw new Error("Failed to create event")
+//             }
+
+//             const data = await res.json()
+
+//             console.log("Event created successfully:", data)
+
+//             // Navigate to upcoming events page
+//             router.push("/manage-event")
+//             router.refresh()
+
+//         } catch (error) {
+//             console.error("Event creation error:", error)
+//         }
+//     }
 
 
     return (
@@ -289,10 +414,13 @@ console.log(eventData)
                                 </Field>
 
                                 <Field className="sm:col-span-2">
-                                    <Button type="submit" className="h-11 w-full gap-2">
+                                    {/* <Button type="submit" className="h-11 w-full gap-2">
                                         <Send />
                                         Create Event
-                                    </Button>
+                                    </Button> */}
+                                    <Button type="submit" disabled={isPending}>
+  {isPending ? "Creating Event..." : "Create Event"}
+</Button>
                                 </Field>
                             </FieldGroup>
                         </Form>

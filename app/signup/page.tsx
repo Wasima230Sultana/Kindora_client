@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { authClient } from "@/lib/auth-client"
+import Swal from "sweetalert2"
 
 type FieldName = "name" | "email" | "photoURL" | "password"
 
@@ -32,7 +33,7 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 export default function SignUpPage() {
   const router = useRouter()
   const [errors, setErrors] = useState<FormErrors>({})
-  const [serverError, setServerError] = useState<string | null>(null)
+  // const [serverError, setServerError] = useState<string | null>(null)
   const [isPending, setIsPending] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
@@ -42,75 +43,175 @@ export default function SignUpPage() {
     )
   }
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setServerError(null)
+  // const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault()
+  //   setServerError(null)
 
-    const values = Object.fromEntries(
-      new FormData(event.currentTarget).entries()
-    ) as Record<string, string>
+  //   const values = Object.fromEntries(
+  //     new FormData(event.currentTarget).entries()
+  //   ) as Record<string, string>
 
-    const nextErrors: FormErrors = {}
-    if (!values.name?.trim()) {
-      nextErrors.name = "Full name is required"
-    }
-    if (!values.email?.trim()) {
-      nextErrors.email = "Email address is required"
-    } else if (!EMAIL_PATTERN.test(values.email.trim())) {
-      nextErrors.email = "Enter a valid email address"
-    }
-    if (!values.photoURL?.trim()) {
-      nextErrors.photoURL = "Photo URL is required"
-    } else {
-      try {
-        new URL(values.photoURL)
-      } catch {
-        nextErrors.photoURL = "Enter a valid URL (including https://)"
-      }
-    }
-    if (!values.password) {
-      nextErrors.password = "Password is required"
-    } else if (values.password.length < 6) {
-      nextErrors.password = "Password must be at least 6 characters"
-    } else if (!/[A-Z]/.test(values.password)) {
-      nextErrors.password =
-        "Password must contain at least one uppercase letter"
-    } else if (!/[a-z]/.test(values.password)) {
-      nextErrors.password =
-        "Password must contain at least one lowercase letter"
-    }
+  //   const nextErrors: FormErrors = {}
+  //   if (!values.name?.trim()) {
+  //     nextErrors.name = "Full name is required"
+  //   }
+  //   if (!values.email?.trim()) {
+  //     nextErrors.email = "Email address is required"
+  //   } else if (!EMAIL_PATTERN.test(values.email.trim())) {
+  //     nextErrors.email = "Enter a valid email address"
+  //   }
+  //   if (!values.photoURL?.trim()) {
+  //     nextErrors.photoURL = "Photo URL is required"
+  //   } else {
+  //     try {
+  //       new URL(values.photoURL)
+  //     } catch {
+  //       nextErrors.photoURL = "Enter a valid URL (including https://)"
+  //     }
+  //   }
+  //   if (!values.password) {
+  //     nextErrors.password = "Password is required"
+  //   } else if (values.password.length < 6) {
+  //     nextErrors.password = "Password must be at least 6 characters"
+  //   } else if (!/[A-Z]/.test(values.password)) {
+  //     nextErrors.password =
+  //       "Password must contain at least one uppercase letter"
+  //   } else if (!/[a-z]/.test(values.password)) {
+  //     nextErrors.password =
+  //       "Password must contain at least one lowercase letter"
+  //   }
 
-    setErrors(nextErrors)
-    if (Object.keys(nextErrors).length > 0) {
+  //   setErrors(nextErrors)
+  //   if (Object.keys(nextErrors).length > 0) {
+  //     return
+  //   }
+
+  //   setIsPending(true)
+  //   try {
+  //     // better-auth stores the avatar in `image`, not `photoURL`.
+  //     const { data, error } = await authClient.signUp.email({
+  //       name: values.name.trim(),
+  //       email: values.email.trim(),
+  //       password: values.password,
+  //       image: values.photoURL.trim(),
+  //     })
+
+  //     if (error) {
+  //       setServerError(
+  //         error.message ?? "Something went wrong. Please try again."
+  //       )
+  //       return
+  //     }
+  //     if (data) {
+  //       router.push("/")
+  //       router.refresh()
+  //     }
+  //   } catch {
+  //     setServerError("Something went wrong. Please try again.")
+  //   } finally {
+  //     setIsPending(false)
+  //   }
+  // }
+
+  
+const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  event.preventDefault()
+
+  const values = Object.fromEntries(
+    new FormData(event.currentTarget).entries()
+  ) as Record<string, string>
+
+  const nextErrors: FormErrors = {}
+
+  if (!values.name?.trim()) {
+    nextErrors.name = "Full name is required"
+  }
+
+  if (!values.email?.trim()) {
+    nextErrors.email = "Email address is required"
+  } else if (!EMAIL_PATTERN.test(values.email.trim())) {
+    nextErrors.email = "Enter a valid email address"
+  }
+
+  if (!values.photoURL?.trim()) {
+    nextErrors.photoURL = "Photo URL is required"
+  } else {
+    try {
+      new URL(values.photoURL)
+    } catch {
+      nextErrors.photoURL = "Enter a valid URL (including https://)"
+    }
+  }
+
+  if (!values.password) {
+    nextErrors.password = "Password is required"
+  } else if (values.password.length < 6) {
+    nextErrors.password = "Password must be at least 6 characters"
+  } else if (!/[A-Z]/.test(values.password)) {
+    nextErrors.password =
+      "Password must contain at least one uppercase letter"
+  } else if (!/[a-z]/.test(values.password)) {
+    nextErrors.password =
+      "Password must contain at least one lowercase letter"
+  }
+
+  setErrors(nextErrors)
+
+  if (Object.keys(nextErrors).length > 0) {
+    await Swal.fire({
+      title: "Invalid Information!",
+      text: "Please check the form and correct the highlighted fields.",
+      icon: "warning",
+      confirmButtonColor: "#7c3aed",
+    })
+    return
+  }
+
+  setIsPending(true)
+
+  try {
+    const { data, error } = await authClient.signUp.email({
+      name: values.name.trim(),
+      email: values.email.trim(),
+      password: values.password,
+      image: values.photoURL.trim(),
+    })
+
+    if (error) {
+      await Swal.fire({
+        title: "Registration Failed!",
+        text: error.message ?? "Something went wrong. Please try again.",
+        icon: "error",
+        confirmButtonColor: "#7c3aed",
+      })
       return
     }
 
-    setIsPending(true)
-    try {
-      // better-auth stores the avatar in `image`, not `photoURL`.
-      const { data, error } = await authClient.signUp.email({
-        name: values.name.trim(),
-        email: values.email.trim(),
-        password: values.password,
-        image: values.photoURL.trim(),
+    if (data) {
+      await Swal.fire({
+        title: "Account Created!",
+        text: "Your account has been created successfully.",
+        icon: "success",
+        timer: 1800,
+        showConfirmButton: false,
       })
 
-      if (error) {
-        setServerError(
-          error.message ?? "Something went wrong. Please try again."
-        )
-        return
-      }
-      if (data) {
-        router.push("/")
-        router.refresh()
-      }
-    } catch {
-      setServerError("Something went wrong. Please try again.")
-    } finally {
-      setIsPending(false)
+      router.push("/")
+      router.refresh()
     }
+  } catch {
+    await Swal.fire({
+      title: "Something Went Wrong!",
+      text: "Unable to create your account. Please try again.",
+      icon: "error",
+      confirmButtonColor: "#7c3aed",
+    })
+  } finally {
+    setIsPending(false)
   }
+}
+
+
 
   return (
     <div className="min-h-svh">
@@ -251,14 +352,14 @@ export default function SignUpPage() {
                   <FieldError>{errors.password}</FieldError>
                 </Field>
 
-                {serverError && (
+                {/* {serverError && (
                   <p
                     role="alert"
                     className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
                   >
                     {serverError}
                   </p>
-                )}
+                )} */}
 
                 <Button
                   type="submit"

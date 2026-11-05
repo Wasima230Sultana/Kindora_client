@@ -7,21 +7,21 @@ export async function RecentUpcomingEvents() {
   let events: Event[] = []
 
   try {
-    // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/upcoming-events`, {
-    //   cache: "no-store",
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/create-event`, {
+      cache: "no-store",
       
-    // } )
-const apiUrl = process.env.NEXT_PUBLIC_API_URL
+    } )
+// const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
-console.log("DEBUG API URL:", apiUrl)
+// console.log("DEBUG API URL:", apiUrl)
 
-if (!apiUrl || apiUrl.includes("localhost")) {
-  throw new Error(`Invalid API URL: ${apiUrl}`)
-}
+// if (!apiUrl || apiUrl.includes("localhost")) {
+//   throw new Error(`Invalid API URL: ${apiUrl}`)
+// }
 
-const res = await fetch(`${apiUrl}/create-event`, {
-  cache: "no-store",
-})
+// const res = await fetch(`${apiUrl}/create-event`, {
+//   cache: "no-store",
+// })
     if (!res.ok) {
       throw new Error("Failed to fetch events")
     }

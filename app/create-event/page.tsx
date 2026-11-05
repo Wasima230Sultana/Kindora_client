@@ -1,48 +1,48 @@
 'use client'
-import { useSyncExternalStore, useState, type FormEvent } from "react"
+// import { useSyncExternalStore, useState, type FormEvent } from "react"
 
 import EventForm from "@/components/events/Event-Form"
-import { CalendarCheck, Leaf, Send } from "lucide-react"
+import { CalendarCheck, Leaf } from "lucide-react"
 
-const eventTypes = [
-  "Registration",
-  "Donation",
-  "Cleanup",
-  "Relief",
-  "Fundraising",
-  "Awareness",
-  "Volunteering",
-  "Distribution",
-  "Training",
-  "Campaign",
-]
+// const eventTypes = [
+//   "Registration",
+//   "Donation",
+//   "Cleanup",
+//   "Relief",
+//   "Fundraising",
+//   "Awareness",
+//   "Volunteering",
+//   "Distribution",
+//   "Training",
+//   "Campaign",
+// ]
 
-type FieldName =
-  "title" | "eventType" | "image" | "location" | "date" | "description"
+// type FieldName =
+//   "title" | "eventType" | "image" | "location" | "date" | "description"
 
-type FormErrors = Partial<Record<FieldName, string>>
+// type FormErrors = Partial<Record<FieldName, string>>
 
-function getTodayIso() {
-  const now = new Date()
-  const month = String(now.getMonth() + 1).padStart(2, "0")
-  const day = String(now.getDate()).padStart(2, "0")
-  return `${now.getFullYear()}-${month}-${day}`
-}
+// function getTodayIso() {
+//   const now = new Date()
+//   const month = String(now.getMonth() + 1).padStart(2, "0")
+//   const day = String(now.getDate()).padStart(2, "0")
+//   return `${now.getFullYear()}-${month}-${day}`
+// }
 
-const subscribeNoop = () => () => { }
+// const subscribeNoop = () => () => { }
 
 export default function CreateEventPage() {
-  const [errors, setErrors] = useState<FormErrors>({})
+  // const [errors, setErrors] = useState<FormErrors>({})
 
-  // The page is prerendered at build time: read "today" on the client only, so
-  // the date picker's `min` bound is accurate and hydration stays consistent.
-  const minDate = useSyncExternalStore(subscribeNoop, getTodayIso, () => "")
+  // // The page is prerendered at build time: read "today" on the client only, so
+  // // the date picker's `min` bound is accurate and hydration stays consistent.
+  // const minDate = useSyncExternalStore(subscribeNoop, getTodayIso, () => "")
 
-  const clearError = (name: FieldName) => {
-    setErrors((previous) =>
-      previous[name] ? { ...previous, [name]: undefined } : previous
-    )
-  }
+  // const clearError = (name: FieldName) => {
+  //   setErrors((previous) =>
+  //     previous[name] ? { ...previous, [name]: undefined } : previous
+  //   )
+  // }
 
 
 

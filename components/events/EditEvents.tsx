@@ -11,11 +11,9 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Event } from "../type/type";
-import { redirect } from "next/navigation";
 import { useSyncExternalStore, useState, type FormEvent } from "react"
 
 import { Form } from "@base-ui/react"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
     Field,
@@ -33,6 +31,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { getTokenFromClient } from "@/lib/getTokenFromClient";
+import Swal from "sweetalert2";
 
 
 const eventTypes = [
@@ -61,7 +60,7 @@ function getTodayIso() {
 const subscribeNoop = () => () => { }
 
 const EditEvents = ({ result }: { result: Event }) => {
-    const router = useRouter()
+
     const [errors, setErrors] = useState<FormErrors>({})
     const [eventType, setEventType] = useState(result.eventType || "")
     // The page is prerendered at build time: read "today" on the client only, so
@@ -74,53 +73,131 @@ const EditEvents = ({ result }: { result: Event }) => {
         )
     }
 
-    const handleUpdateEvent = async (
-        event: React.FormEvent<HTMLFormElement>
-    ) => {
-        event.preventDefault();
+    
+const handleUpdateEvent = async (
+  event: React.FormEvent<HTMLFormElement>
+) => {
+  event.preventDefault()
 
-        const form = event.currentTarget;
-        const formData = new FormData(form);
+  const form = event.currentTarget
+  const formData = new FormData(form)
 
-        const eventData = {
-            title: formData.get("title"),
-            eventType: formData.get("eventType"),
-            image: formData.get("image"),
-            location: formData.get("location"),
-            date: formData.get("date"),
-            description: formData.get("description"),
-        };
+  const eventData = {
+    title: formData.get("title"),
+    eventType: formData.get("eventType"),
+    image: formData.get("image"),
+    location: formData.get("location"),
+    date: formData.get("date"),
+    description: formData.get("description"),
+  }
 
-        try {
-            const token = await getTokenFromClient()
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/manage-event/${result._id}`,
-                {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json",
-                        authorization: `Bearer ${token}`
-                    },
-                    body: JSON.stringify(eventData),
-                }
-            );
+  // Confirmation
+  const confirmation = await Swal.fire({
+    title: "Update Event?",
+    text: "Are you sure you want to save these changes?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Yes, Update",
+    cancelButtonText: "Cancel",
+    confirmButtonColor: "#7c3aed",
+    cancelButtonColor: "#6b7280",
+  })
 
-            if (!res.ok) {
-                const errorData = await res.json()
-                throw new Error(errorData.message || "Failed to update event")
-            }
+  if (!confirmation.isConfirmed) return
 
-            console.log("Event updated successfully!")
+  try {
+    const token = await getTokenFromClient()
 
-            console.log("Before redirect")
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/manage-event/${result._id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(eventData),
+      }
+    )
 
-            window.location.href = "/manage-event"
+    if (!res.ok) {
+      const errorData = await res.json()
+      throw new Error(errorData.message || "Failed to update event")
+    }
 
-            console.log("After redirect")
-        } catch (error) {
-            console.error("Update event error:", error);
-        }
-    };
+    await Swal.fire({
+      title: "Event Updated!",
+      text: "Your event has been updated successfully.",
+      icon: "success",
+      timer: 1800,
+      showConfirmButton: false,
+    })
+
+    window.location.href = "/manage-event"
+
+  } catch (error) {
+    console.error("Update event error:", error)
+
+    await Swal.fire({
+      title: "Update Failed!",
+      text:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again.",
+      icon: "error",
+      confirmButtonColor: "#7c3aed",
+    })
+  }
+}
+
+
+    // const handleUpdateEvent = async (
+    //     event: React.FormEvent<HTMLFormElement>
+    // ) => {
+    //     event.preventDefault();
+
+    //     const form = event.currentTarget;
+    //     const formData = new FormData(form);
+
+    //     const eventData = {
+    //         title: formData.get("title"),
+    //         eventType: formData.get("eventType"),
+    //         image: formData.get("image"),
+    //         location: formData.get("location"),
+    //         date: formData.get("date"),
+    //         description: formData.get("description"),
+    //     };
+
+    //     try {
+    //         const token = await getTokenFromClient()
+    //         const res = await fetch(
+    //             `${process.env.NEXT_PUBLIC_API_URL}/manage-event/${result._id}`,
+    //             {
+    //                 method: "PATCH",
+    //                 headers: {
+    //                     "Content-Type": "application/json",
+    //                     authorization: `Bearer ${token}`
+    //                 },
+    //                 body: JSON.stringify(eventData),
+    //             }
+    //         );
+
+    //         if (!res.ok) {
+    //             const errorData = await res.json()
+    //             throw new Error(errorData.message || "Failed to update event")
+    //         }
+
+    //         console.log("Event updated successfully!")
+
+    //         console.log("Before redirect")
+
+    //         window.location.href = "/manage-event"
+
+    //         console.log("After redirect")
+    //     } catch (error) {
+    //         console.error("Update event error:", error);
+    //     }
+    // };
     return (
 
         <AlertDialog>

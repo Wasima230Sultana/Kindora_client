@@ -34,29 +34,35 @@ const token = await getTokenFromServer()
   const events: Event[] = await res.json();
 
   return (
-    <div className="container mx-auto space-y-6 py-10">
-      <div>
-        <h1 className="text-3xl font-bold">Manage My Events</h1>
-        <p className="text-muted-foreground">
-          Manage the events you have created.
-        </p>
-      </div>
+   <div className="mx-auto max-w-5xl space-y-6 px-4 py-10">
+  <div>
+    <h1 className="text-3xl font-bold tracking-tight">
+      Manage My Events
+    </h1>
+    <p className="mt-2 text-muted-foreground">
+      Manage the events you have created.
+    </p>
+  </div>
 
-      <h2 className="text-xl font-semibold">
-        My Created Events ({events.length})
-      </h2>
+  <h2 className="text-xl font-semibold">
+    My Created Events ({events.length})
+  </h2>
 
-      {events.length > 0 ? (
-
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-  {events.map((event) => (
-    <ManageCard key={event._id} event={event} />
-  ))}
-</div>
-      ) : (
-        <p>You haven&apos;t created any events yet.</p>
-      )}
+  {events.length > 0 ? (
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+      {events.map((event) => (
+        <ManageCard key={event._id} event={event} />
+      ))}
     </div>
+  ) : (
+    <div className="rounded-xl border border-dashed p-10 text-center">
+      <p className="font-medium">You haven&apos;t created any events yet.</p>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Create your first event and start making a difference!
+      </p>
+    </div>
+  )}
+</div>
   );
 };
 
