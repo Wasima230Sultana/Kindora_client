@@ -1,4 +1,3 @@
-
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { notFound } from "next/navigation"
@@ -31,7 +30,7 @@ const EventDetailsPage = async ({ params }: PageProps) => {
   const result: Event = await res.json()
 
   return (
-    <main className="min-h-screen bg-[#FAFCFA] px-4 py-8 md:px-8">
+    <main className="min-h-screen bg-[#FAFCFA] px-4 py-8 md:px-8 dark:bg-gray-900">
       <div className="mx-auto max-w-6xl">
         <Link
           href="/upcoming-events"

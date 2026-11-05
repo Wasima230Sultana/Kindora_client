@@ -20,7 +20,7 @@ const EventDetailsCard = async ({ result }: { result: Event }) => {
                     <section className="space-y-5 lg:col-span-2">
 
                         {/* Event Banner */}
-                        <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+                        <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
                             <Image
                                 width={100}
                                 height={100}
@@ -34,17 +34,17 @@ const EventDetailsCard = async ({ result }: { result: Event }) => {
                         <div className="space-y-4">
 
                             <div className="flex flex-wrap items-center gap-3">
-                                <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl">
+                                <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl dark:text-white">
                                     {result.title}
                                 </h1>
 
-                                <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+                                <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-400">
                                     {result.eventType}
                                 </span>
                             </div>
 
                             {/* Location and Date */}
-                            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-gray-600">
+                            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-gray-600 dark:text-gray-300">
 
                                 <div className="flex items-center gap-2">
                                     <MapPin
@@ -66,19 +66,19 @@ const EventDetailsCard = async ({ result }: { result: Event }) => {
                         </div>
 
                         {/* About Event */}
-                        <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+                        <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-6">
 
                             <div className="mb-4 flex items-center gap-2">
-                                <div className="rounded-lg bg-purple-100 p-2 text-purple-600">
+                                <div className="rounded-lg bg-purple-100 p-2 text-purple-600 dark:bg-purple-900/30">
                                     <HandHeart size={20} />
                                 </div>
 
-                                <h2 className="text-lg font-bold text-gray-900">
+                                <h2 className="text-lg font-bold text-gray-900 dark:text-white">
                                     About This Event
                                 </h2>
                             </div>
 
-                            <p className="whitespace-pre-line text-sm leading-7 text-gray-600">
+                            <p className="whitespace-pre-line text-sm leading-7 text-gray-600 dark:text-gray-300">
                                 {result.description}
                             </p>
 
@@ -86,35 +86,35 @@ const EventDetailsCard = async ({ result }: { result: Event }) => {
 
 
 {/* Event Information */}
-<div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+<div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-6">
 
-    <h2 className="mb-5 text-lg font-bold text-gray-900">
+    <h2 className="mb-5 text-lg font-bold text-gray-900 dark:text-white">
         Event Information
     </h2>
 
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
-        <div className="flex items-center gap-3 rounded-xl bg-purple-50 p-4">
-            <div className="rounded-lg bg-white p-2 text-purple-600">
+        <div className="flex items-center gap-3 rounded-xl bg-purple-50 p-4 dark:bg-purple-900/30">
+            <div className="rounded-lg bg-white p-2 text-purple-600 dark:bg-gray-900">
                 <CalendarCheck size={21} />
             </div>
 
             <div>
-                <p className="text-xs text-gray-500">Event Date</p>
-                <p className="mt-1 text-sm font-semibold text-gray-800">
+                <p className="text-xs text-gray-500 dark:text-gray-400">Event Date</p>
+                <p className="mt-1 text-sm font-semibold text-gray-800 dark:text-gray-200">
                     {result.date}
                 </p>
             </div>
         </div>
 
-        <div className="flex items-center gap-3 rounded-xl bg-purple-50 p-4">
-            <div className="rounded-lg bg-white p-2 text-purple-600">
+        <div className="flex items-center gap-3 rounded-xl bg-purple-50 p-4 dark:bg-purple-900/30">
+            <div className="rounded-lg bg-white p-2 text-purple-600 dark:bg-gray-900">
                 <MapPin size={21} />
             </div>
 
             <div>
-                <p className="text-xs text-gray-500">Event Location</p>
-                <p className="mt-1 text-sm font-semibold text-gray-800">
+                <p className="text-xs text-gray-500 dark:text-gray-400">Event Location</p>
+                <p className="mt-1 text-sm font-semibold text-gray-800 dark:text-gray-200">
                     {result.location}
                 </p>
             </div>
@@ -124,23 +124,23 @@ const EventDetailsCard = async ({ result }: { result: Event }) => {
 </div>
 
 {/* Organizer Information - Added after Event Information */}
-<div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+<div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-6">
 
     <div className="mb-3 flex items-center gap-2">
-        <div className="rounded-lg bg-purple-100 p-2 text-purple-600">
+        <div className="rounded-lg bg-purple-100 p-2 text-purple-600 dark:bg-purple-900/30">
             <UserRound size={18} />
         </div>
 
-        <h3 className="text-lg font-bold text-gray-900">
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white">
             Organized By
         </h3>
     </div>
 
-    <p className="text-sm font-semibold text-gray-800">
+    <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">
         Event Organizer
     </p>
 
-    <p className="mt-1 break-all text-sm text-gray-500">
+    <p className="mt-1 break-all text-sm text-gray-500 dark:text-gray-400">
         {result.creatorEmail}
     </p>
 
@@ -150,11 +150,11 @@ const EventDetailsCard = async ({ result }: { result: Event }) => {
                     {/* RIGHT SIDE - JOIN EVENT CARD */}
                     <aside className="lg:sticky lg:top-8">
 
-                        <div className="rounded-2xl border border-purple-100 bg-white p-6 shadow-sm">
+                        <div className="rounded-2xl border border-purple-100 bg-white p-6 shadow-sm dark:border-purple-900/40 dark:bg-gray-900">
 
                             {/* Icon */}
                             <div className="mb-4 flex justify-center">
-                                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-100 text-purple-600">
+                                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-100 text-purple-600 dark:bg-purple-900/30">
                                     <Users size={28} />
                                 </div>
                             </div>
@@ -162,11 +162,11 @@ const EventDetailsCard = async ({ result }: { result: Event }) => {
                             {/* Heading */}
                             <div className="text-center">
 
-                                <h2 className="text-xl font-bold text-gray-900">
+                                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                                     Join This Event
                                 </h2>
 
-                                <p className="mt-2 text-sm leading-6 text-gray-500">
+                                <p className="mt-2 text-sm leading-6 text-gray-500 dark:text-gray-400">
                                     Be a part of this meaningful initiative!
                                     Join us and help spread warmth and happiness
                                     to people in need.
@@ -175,34 +175,34 @@ const EventDetailsCard = async ({ result }: { result: Event }) => {
                             </div>
 
                             {/* Event Summary */}
-                            <div className="my-6 space-y-4 rounded-xl bg-purple-50 p-4">
+                            <div className="my-6 space-y-4 rounded-xl bg-purple-50 p-4 dark:bg-purple-900/30">
 
                                 <div>
-                                    <p className="text-xs text-gray-500">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">
                                         Event Name
                                     </p>
 
-                                    <p className="mt-1 text-sm font-semibold text-gray-800">
+                                    <p className="mt-1 text-sm font-semibold text-gray-800 dark:text-gray-200">
                                         {result.title}
                                     </p>
                                 </div>
 
-                                <div className="border-t border-purple-100 pt-3">
-                                    <p className="text-xs text-gray-500">
+                                <div className="border-t border-purple-100 pt-3 dark:border-purple-900/40">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">
                                         Date
                                     </p>
 
-                                    <p className="mt-1 text-sm font-semibold text-gray-800">
+                                    <p className="mt-1 text-sm font-semibold text-gray-800 dark:text-gray-200">
                                         {result.date}
                                     </p>
                                 </div>
 
-                                <div className="border-t border-purple-100 pt-3">
-                                    <p className="text-xs text-gray-500">
+                                <div className="border-t border-purple-100 pt-3 dark:border-purple-900/40">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">
                                         Location
                                     </p>
 
-                                    <p className="mt-1 text-sm font-semibold text-gray-800">
+                                    <p className="mt-1 text-sm font-semibold text-gray-800 dark:text-gray-200">
                                         {result.location}
                                     </p>
                                 </div>
@@ -211,7 +211,7 @@ const EventDetailsCard = async ({ result }: { result: Event }) => {
 <MyJoinedEvent result={result}></MyJoinedEvent>
                             
 
-                            <p className="mt-4 text-center text-xs leading-5 text-gray-400">
+                            <p className="mt-4 text-center text-xs leading-5 text-gray-400 dark:text-gray-500">
                                 Together, we can make a difference!
                             </p>
 
