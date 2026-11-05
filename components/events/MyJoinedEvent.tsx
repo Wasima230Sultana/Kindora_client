@@ -111,16 +111,19 @@ const handleSubmit = async (e: React.FormEvent<HTMLElement>) => {
       })
 
     } catch (error) {
-      await Swal.fire({
-        title: "Something Went Wrong!",
-        text:
-          error instanceof Error
-            ? error.message
-            : "Unable to join this event. Please try again.",
-        icon: "error",
-        confirmButtonColor: "#7c3aed",
-      })
-    }
+  const errorMessage =
+  error instanceof Error ? error.message : "";
+
+await Swal.fire({
+  title: "Unable to Join Event!",
+  text: errorMessage.includes("already")
+    ? "You have already joined an event. Please leave your current event before joining another one."
+    : "Something went wrong while joining this event. Please try again.",
+  icon: "warning",
+  confirmButtonText: "Got it",
+  confirmButtonColor: "#7c3aed",
+});
+}
   }
     return (
         <div>

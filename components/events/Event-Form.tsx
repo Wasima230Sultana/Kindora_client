@@ -171,7 +171,7 @@ setIsPending(true)
       showConfirmButton: false,
     })
 
-    router.push("/manage-event")
+    router.push("/upcoming-events")
     router.refresh()
 
   } catch (error) {
