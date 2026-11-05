@@ -35,13 +35,12 @@ export default function RootLayout({
       suppressHydrationWarning
       className={cn(
         "scroll-smooth antialiased",
-        fontMono.variable,
-        "font-sans",
         geist.variable,
+        fontMono.variable,
         poppins.variable
       )}
     >
-      <body>
+      <body className="font-sans">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

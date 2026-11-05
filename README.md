@@ -170,6 +170,7 @@ Make sure the backend API is running before testing event-related functionality.
 | `/create-event` | Create a new event | Authenticated |
 | `/manage-event` | Edit and delete created events | Authenticated |
 | `/joined-event` | View joined events | Authenticated |
+| `/wishlist` | Waitlist for events: join when Available, queue when Occupied, first waiter gets the spot on cancellation | Authenticated |
 | `/profile` | View user profile | Authenticated |
 | `/login` | Sign in to Kindora | Public |
 | `/signup` | Create a new account | Public |

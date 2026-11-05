@@ -7,9 +7,7 @@ import {
   Heart,
   LogOut,
   Menu,
-
   Settings,
-
   UserRound,
 } from "lucide-react"
 import Link from "next/link"
@@ -45,10 +43,10 @@ import ThemeToggle from "../theme/ThemeToggle"
 const userMenuLinks = [
   { label: "Create Event", href: "/create-event", icon: CalendarPlus },
   { label: "Joined Event", href: "/joined-event", icon: CalendarCheck },
+  // { label: "Wishlist", href: "/wishlist", icon: Heart },
   { label: "Manage Event", href: "/manage-event", icon: Settings },
   { label: "Profile", href: "/profile", icon: UserRound },
 ]
-
 
 function Logo() {
   return (
@@ -80,7 +78,7 @@ export function Navbar() {
   //         (link) => link.href === "/" || link.href === "/upcoming-events"
   //       )
   //     : navLinks;
-      
+
   const handleSignout = async () => {
     await authClient.signOut()
   }
@@ -91,8 +89,7 @@ export function Navbar() {
   }
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4">
-        <Logo />
+<div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-2 px-3 sm:px-4">        <Logo />
 
         <nav className="hidden items-center gap-1 lg:flex">
           {navLinks.map((link) => {
@@ -115,130 +112,142 @@ export function Navbar() {
             )
           })}
         </nav>
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-          {user ? (
-            <>
-              {" "}
-              <DropdownMenu>
-                <DropdownMenuTrigger
-                  aria-label="Open account menu"
-                  render={
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="hidden gap-2 rounded-full px-2 focus-visible:ring-2 focus-visible:ring-primary sm:flex"
-                    />
-                  }
-                >
-<Tooltip>
-  <TooltipTrigger
-    render={
-      <Avatar size="sm">
-        <AvatarImage
-          src={user.image || undefined}
-          alt={user.name || "User"}
-        />
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+  <ThemeToggle />
 
-        <AvatarFallback>
-          {user.name?.charAt(0).toUpperCase() || "U"}
-        </AvatarFallback>
-      </Avatar>
-    }
-  />
+  {user ? (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        aria-label="Open account menu"
+        render={
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9 rounded-full"
+          />
+        }
+      >
+        <Avatar size="sm">
+          <AvatarImage
+            src={user.image || undefined}
+            alt={user.name || "User"}
+          />
+          <AvatarFallback>
+            {user.name?.charAt(0).toUpperCase() || "U"}
+          </AvatarFallback>
+        </Avatar>
+      </DropdownMenuTrigger>
 
-  <TooltipContent>
-    <p>{user.name || "User"}</p>
-  </TooltipContent>
-</Tooltip>
-
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  {userMenuLinks.map((link) => {
-                    const Icon = link.icon
-                    return (
-                      <DropdownMenuItem
-                        key={link.label}
-                        render={<a href={link.href} />}
-                        className="cursor-pointer gap-2"
-                      >
-                        <Icon className="text-primary" />
-                        {link.label}
-                      </DropdownMenuItem>
-                    )
-                  })}
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={handleSignout}
-                    variant="destructive"
-                    className="cursor-pointer gap-2"
-                  >
-                    <LogOut />
-                    Sign Out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </>
-          ) : (
-            <>
-              {" "}
-              <Link href={"/signup"}>
-                {" "}
-                <Button className="rounded-full px-5">Sign up</Button>
-              </Link>
-              <Link href={"/login"}>
-                {" "}
-                <Button className="rounded-full px-5">Login</Button>
-              </Link>
-            </>
-          )}
-
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger
-              render={
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="lg:hidden"
-                  aria-label="Open menu"
-                />
-              }
+      <DropdownMenuContent align="end" className="w-56">
+        {userMenuLinks.map((link) => {
+          const Icon = link.icon;
+          return (
+            <DropdownMenuItem
+              key={link.label}
+              render={<a href={link.href} />}
+              className="cursor-pointer gap-2"
             >
-              <Menu />
-            </SheetTrigger>
-            <SheetContent side="right">
-              <SheetHeader>
-                <SheetTitle>Kindora</SheetTitle>
-                <SheetDescription className="sr-only">
-                  Site navigation
-                </SheetDescription>
-              </SheetHeader>
-              <nav className="flex flex-col gap-2 px-4 pb-4">
-                {navLinks.map((link) => {
-                  const active = isActive(link.href)
+              <Icon className="text-primary" />
+              {link.label}
+            </DropdownMenuItem>
+          );
+        })}
 
-                  return (
-                    <SheetClose
-                      nativeButton={false}
-                      key={link.label}
-                      render={<Link href={link.href} />}
-                      onClick={() => setOpen(false)}
-                      aria-current={active ? "page" : undefined}
-                      className={cn(
-                        "rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200",
-                        active
-                          ? "bg-primary text-primary-foreground shadow-sm"
-                          : "text-foreground/80 hover:bg-accent hover:text-foreground"
-                      )}
-                    >
-                      {link.label}
-                    </SheetClose>
-                  )
-                })}
-              </nav>
-            </SheetContent>
-          </Sheet>
-        </div>
+        <DropdownMenuSeparator />
+
+        <DropdownMenuItem
+          onClick={handleSignout}
+          variant="destructive"
+          className="cursor-pointer gap-2"
+        >
+          <LogOut />
+          Sign Out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ) : (
+    <div className="hidden items-center gap-2 sm:flex">
+      <Link href="/signup">
+        <Button className="rounded-full px-5">Sign up</Button>
+      </Link>
+      <Link href="/login">
+        <Button className="rounded-full px-5">Login</Button>
+      </Link>
+    </div>
+  )}
+
+  <Sheet open={open} onOpenChange={setOpen}>
+    <SheetTrigger
+      render={
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-10 w-10 shrink-0 lg:hidden"
+          aria-label="Open menu"
+        />
+      }
+    >
+      <Menu />
+    </SheetTrigger>
+
+    <SheetContent side="right">
+      <SheetHeader>
+        <SheetTitle>Kindora</SheetTitle>
+        <SheetDescription className="sr-only">
+          Site navigation
+        </SheetDescription>
+      </SheetHeader>
+
+      <nav className="flex flex-col gap-2 px-4 pb-4">
+        {navLinks.map((link) => {
+          const active = isActive(link.href);
+
+          return (
+            <SheetClose
+              nativeButton={false}
+              key={link.label}
+              render={<Link href={link.href} />}
+              onClick={() => setOpen(false)}
+              aria-current={active ? "page" : undefined}
+              className={cn(
+                "rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200",
+                active
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-foreground/80 hover:bg-accent hover:text-foreground"
+              )}
+            >
+              {link.label}
+            </SheetClose>
+          );
+        })}
+      </nav>
+
+      <div className="flex flex-col gap-3 px-4">
+        {user ? (
+          <Button
+            onClick={handleSignout}
+            variant="destructive"
+            className="w-full"
+          >
+            <LogOut />
+            Sign Out
+          </Button>
+        ) : (
+          <>
+            <Link href="/signup">
+              <Button className="w-full">Sign Up</Button>
+            </Link>
+            <Link href="/login">
+              <Button variant="outline" className="w-full">
+                Login
+              </Button>
+            </Link>
+          </>
+        )}
+      </div>
+    </SheetContent>
+  </Sheet>
+</div>
       </div>
     </header>
   )

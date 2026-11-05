@@ -5,10 +5,14 @@ import { Avatar, AvatarGroup, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { avatarImages, heroImage } from "@/lib/data"
 import Link from "next/link"
-import { authClient } from "@/lib/auth-client"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
 
 export async function Banner() {
-    const {data:session} = await authClient.getSession()
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    })
+
     const user = session?.user
   return (
     <section
