@@ -14,7 +14,7 @@ import MyJoinedEvent from '../events/MyJoinedEvent';
 const EventDetailsCard = async ({ result }: { result: Event }) => {
 
          return (
-        <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
+        <div className=" grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
 
                     {/* LEFT SIDE - EVENT DETAILS */}
                     <section className="space-y-5 lg:col-span-2">

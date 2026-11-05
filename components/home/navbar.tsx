@@ -7,9 +7,7 @@ import {
   Heart,
   LogOut,
   Menu,
-
   Settings,
-
   UserRound,
 } from "lucide-react"
 import Link from "next/link"
@@ -45,10 +43,10 @@ import ThemeToggle from "../theme/ThemeToggle"
 const userMenuLinks = [
   { label: "Create Event", href: "/create-event", icon: CalendarPlus },
   { label: "Joined Event", href: "/joined-event", icon: CalendarCheck },
+  // { label: "Wishlist", href: "/wishlist", icon: Heart },
   { label: "Manage Event", href: "/manage-event", icon: Settings },
   { label: "Profile", href: "/profile", icon: UserRound },
 ]
-
 
 function Logo() {
   return (
@@ -80,7 +78,7 @@ export function Navbar() {
   //         (link) => link.href === "/" || link.href === "/upcoming-events"
   //       )
   //     : navLinks;
-      
+
   const handleSignout = async () => {
     await authClient.signOut()
   }
@@ -131,27 +129,26 @@ export function Navbar() {
                     />
                   }
                 >
-<Tooltip>
-  <TooltipTrigger
-    render={
-      <Avatar size="sm">
-        <AvatarImage
-          src={user.image || undefined}
-          alt={user.name || "User"}
-        />
+                  <Tooltip>
+                    <TooltipTrigger
+                      render={
+                        <Avatar size="sm">
+                          <AvatarImage
+                            src={user.image || undefined}
+                            alt={user.name || "User"}
+                          />
 
-        <AvatarFallback>
-          {user.name?.charAt(0).toUpperCase() || "U"}
-        </AvatarFallback>
-      </Avatar>
-    }
-  />
+                          <AvatarFallback>
+                            {user.name?.charAt(0).toUpperCase() || "U"}
+                          </AvatarFallback>
+                        </Avatar>
+                      }
+                    />
 
-  <TooltipContent>
-    <p>{user.name || "User"}</p>
-  </TooltipContent>
-</Tooltip>
-
+                    <TooltipContent>
+                      <p>{user.name || "User"}</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   {userMenuLinks.map((link) => {
